@@ -7,20 +7,23 @@
 
 require_once("../admin/db_connect.php");
 
+/**
+ * Fix some common mistakes users do when entering regular expressions for searching:
+ * replace dashes with spaces (unless the regexp includes a set of chars),
+ * remove duplicate spaces,
+ * remove quotes and other chars that are irrelevant for searching in the Tanakh.
+ */
 function fix_regexp($phrase) {
-	return $phrase;
-	$quote = "'\"";
+	if (!preg_match("|\\[|",$phrase))
+		$phrase = preg_replace("/-/"," ",$phrase);
 	$phrase = preg_replace("/ +/", " ", $phrase);
-	$phrase = preg_replace("/[$quote><&/]/","",$phrase);
-	if (!preg_match("|\\[|",$phrase)) {
-		 $phrase = preg_replace("/-/"," ",$phrase);
-	}
+	$quote = "'\"";
+	$phrase = preg_replace("/[$quote><&\\/]/","",$phrase);
 	return $phrase;
 }
 
 /**
- * 
- * checks if the given regular expression is valid.
+ * Check if the given regular expression is valid.
  * If it is valid - returns an empty string.
  *	else - returns the error message.
  */
@@ -36,7 +39,13 @@ function regexp_error ($phrase) {
 }
 
 /**
- * @param $single_verse - true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
+ * Internal function - search a regular expression in SQL SELECT results.
+ * 
+ * @param $verses the result of an SQL SELECT query on the Tanakh verses table.
+ * @param $phrase the regular expression to search.
+ * @param $emphasize_phrase boolean true to make the search phrase boldface. 
+ * @param $single_verse boolean true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
+ * @param $niqud_level boolean true to add dots (niqud) to the emphasized verses.
  */ 
 function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud_level=0) {
 	global $linkroot, $newline;
@@ -55,11 +64,8 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 		$ktovt_sikum = $verse['ktovt_sikum'];
 
 		$verse_text_bli_niqud =
-			//preg_replace("/אדני/", "ד'",
 			preg_replace("/יהוה/", "ה'",
-			//preg_replace("/[^ אבגדהוזחטיךכלםמןנסעףפץצקרשת]/","",
 			preg_replace("/<b>.*<\/b>/","",
-			//preg_replace("/[-~:;]/"," ",
 			$verse_text));
 
 		if (preg_match("/$phrase/",$verse_text_bli_niqud)) {
@@ -92,7 +98,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 				}
 			}
 			list($kotrt_qodmt, $ktovt_qodm, $mspr_psuq_qodm, $verse_text_bli_niqud_qodmt) = array($kotrt, $ktovt, $mspr_psuq, $verse_text_bli_niqud);
-			# if there is no match in this verse, keep this verse for checking it's combination with the next verse
+			# if there is no match in this verse, keep this verse for checking its combination with the next verse
 		}
 	}
 	
@@ -100,6 +106,14 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 }
 
 
+/**
+ * If $emphasize_phrase is true, return two versions of the verse in which the phrase is emphasized.
+ *  
+ * @param sting $verse_text_bli_niqud
+ * @param sting $phrase
+ * @param boolean $emphasize_phrase
+ * @return multitype:string
+ */
 function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase) {
 	if ($emphasize_phrase) {
 		$phrase_without_spaces = 
@@ -115,6 +129,10 @@ function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_p
 	}
 }
 
+/**
+ * Create an HTML LI element with the given verse.
+ * @return string
+ */
 function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, $niqud_level) {
 	global $linkroot, $newline;
 
@@ -143,7 +161,7 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
 
 
 /**
- * Find a regular expression in Tanakh verses.
+ * Main function - search a regular expression in Tanakh verses.
  * 
  * @param $phrase the regular expression to look for.
  * @param $single_verse [boolean] - true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
