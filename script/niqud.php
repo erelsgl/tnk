@@ -16,7 +16,7 @@ $NOTLETTER = "[^א-ת]";
 $WORDBOUND = "[ \t\n<>.;:,'\"!?]";  // Don't include []
 
 /** 
- * Add niqud to the first $limit psuqim in $contents. (set $limit=1 to convert all)
+ * Add niqud to the first $limit psuqim in $contents. (set $limit=-1 to convert all)
  */
 function niqud_psuqim($contents, $limit=1) {
 	$quote = "[\\'\\\"]";
@@ -69,6 +69,9 @@ function niqud_psuqim($contents, $limit=1) {
 	return $contents;
 }
 
+/**
+ * Add niqud to a single verse. Used as callback by regexp searcher in niqud_psuqim. 
+ */
 function niqud_psuq($matches) {
 	global $NOTLETTER, $WORDBOUND;
 
@@ -113,7 +116,6 @@ function niqud_psuq($matches) {
 		}
 	}
 
-
 	$new_contents = str_replace($citut_mqori,$citut_mnuqd,$contents);
 
 	if (is_too_shorter($new_contents,$contents)) {
@@ -127,46 +129,54 @@ function is_too_shorter($new, $original) {
 	return strlen($new)<strlen($original)*0.9;
 }
 
-function test1() {
-	$contents = "בימיו בנה חיאל בית האלי את <b>יריחה</b> באבירם בכרו יסדה 
-ובשגיב צעירו הציב דלתיה כדבר ה' אשר דבר ביד יהושע בן נון";
 
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-	print "<p>$contents</p>";
-}
 
-function test2() {
-	//$GLOBALS['DEBUG_QUERY_TIMES']=true;
-	$contents = "בִּשְׁנַת שְׁלֹשִׁים וְאַחַת שָׁנָה לְאָסָא מֶלֶךְ יְהוּדָה מָלַךְ עָמְרִי עַל יִשְׂרָאֵל שְׁתֵּים עֶשְׂרֵה שָׁנָה, בְּתִרְצָה מָלַךְ שֵׁשׁ שָׁנִים. וַיִּקֶן אֶת הָהָר שֹׁמְרוֹן מֵאֶת שֶׁמֶר בְּכִכְּרַיִם כָּסֶף וַיִּבֶן אֶת הָהָר וַיִּקְרָא אֶת שֵׁם הָעִיר אֲשֶׁר בָּנָה עַל שֶׁם שֶׁמֶר אֲדֹנֵי הָהָר שֹׁמְרוֹן. וַיַּעֲשֶׂה עָמְרִי הָרַע בְּעֵינֵי ה' וַיָּרַע מִכֹּל אֲשֶׁר לְפָנָיו. וַיֵּלֶךְ בְּכָל דֶּרֶךְ יָרָבְעָם בֶּן נְבָט ובחטאתיו אֲשֶׁר הֶחֱטִיא אֶת יִשְׂרָאֵל לְהַכְעִיס אֶת ה' אֱלֹהֵי יִשְׂרָאֵל בְּהַבְלֵיהֶם. וְיֶתֶר דִּבְרֵי עָמְרִי אֲשֶׁר עָשָׂה וּגְבוּרָתוֹ אֲשֶׁר עָשָׂה הֲלֹא הֵם כְּתוּבִים עַל סֵפֶר דִּבְרֵי הַיָּמִים לְמַלְכֵי יִשְׂרָאֵל. וַיִּשְׁכַּב עָמְרִי עִם אֲבֹתָיו וַיִּקָּבֵר בְּשֹׁמְרוֹן וַיִּמְלֹךְ אַחְאָב בְּנוֹ תַּחְתָּיו";
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-	print "<p>$contents</p>";
-	$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-	print "<p>$contents</p>";
-}
 
-function test3() {
-	//$GLOBALS['DEBUG_QUERY_TIMES']=true;
-	$contents = "אַל לַמְלָכִים, לְמוֹאֵל, אַל לַמְלָכִים שְׁתוֹ <span style='text-decoration: underline;'>יָיִן</span>, וּלְרוֹזְנִים <small>או</small>שֵׁכָר. פֶּן יִשְׁתֶּה וְיִשְׁכַּח מְחֻקָּק, וִישַׁנֶּה דִּין כָּל בְּנֵי עֹנִי";
-	//$contents = "אַל לַמְלָכִים, לְמוֹאֵל, אַל לַמְלָכִים שְׁתוֹ <span style='text-decoration: underline;'>יָיִן</span>, וּלְרוֹזְנִים או שֵׁכָר. פֶּן יִשְׁתֶּה וְיִשְׁכַּח מְחֻקָּק, וִישַׁנֶּה דִּין כָּל בְּנֵי עֹנִי";
-	print "<p>$contents</p>\n";
-	$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
-	print "<p>$contents</p>\n";
-	$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
-	print "<p>$contents</p>\n";
-	$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
-	print "<p>$contents</p>\n";
-}
 
+/**
+ * UNIT TEST
+ */ 
 if (basename(__FILE__)==basename($_SERVER['PHP_SELF'])) {
 	print "<h1>UNIT TEST</h1>\n";
+
+	function test1() {
+		$contents = "בימיו בנה חיאל בית האלי את <b>יריחה</b> באבירם בכרו יסדה
+ובשגיב צעירו הציב דלתיה כדבר ה' אשר דבר ביד יהושע בן נון";
+	
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
+		print "<p>$contents</p>";
+	}
+	
+	function test2() {
+		//$GLOBALS['DEBUG_QUERY_TIMES']=true;
+		$contents = "בִּשְׁנַת שְׁלֹשִׁים וְאַחַת שָׁנָה לְאָסָא מֶלֶךְ יְהוּדָה מָלַךְ עָמְרִי עַל יִשְׂרָאֵל שְׁתֵּים עֶשְׂרֵה שָׁנָה, בְּתִרְצָה מָלַךְ שֵׁשׁ שָׁנִים. וַיִּקֶן אֶת הָהָר שֹׁמְרוֹן מֵאֶת שֶׁמֶר בְּכִכְּרַיִם כָּסֶף וַיִּבֶן אֶת הָהָר וַיִּקְרָא אֶת שֵׁם הָעִיר אֲשֶׁר בָּנָה עַל שֶׁם שֶׁמֶר אֲדֹנֵי הָהָר שֹׁמְרוֹן. וַיַּעֲשֶׂה עָמְרִי הָרַע בְּעֵינֵי ה' וַיָּרַע מִכֹּל אֲשֶׁר לְפָנָיו. וַיֵּלֶךְ בְּכָל דֶּרֶךְ יָרָבְעָם בֶּן נְבָט ובחטאתיו אֲשֶׁר הֶחֱטִיא אֶת יִשְׂרָאֵל לְהַכְעִיס אֶת ה' אֱלֹהֵי יִשְׂרָאֵל בְּהַבְלֵיהֶם. וְיֶתֶר דִּבְרֵי עָמְרִי אֲשֶׁר עָשָׂה וּגְבוּרָתוֹ אֲשֶׁר עָשָׂה הֲלֹא הֵם כְּתוּבִים עַל סֵפֶר דִּבְרֵי הַיָּמִים לְמַלְכֵי יִשְׂרָאֵל. וַיִּשְׁכַּב עָמְרִי עִם אֲבֹתָיו וַיִּקָּבֵר בְּשֹׁמְרוֹן וַיִּמְלֹךְ אַחְאָב בְּנוֹ תַּחְתָּיו";
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
+		print "<p>$contents</p>";
+		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
+		print "<p>$contents</p>";
+	}
+	
+	function test3() {
+		//$GLOBALS['DEBUG_QUERY_TIMES']=true;
+		$contents = "אַל לַמְלָכִים, לְמוֹאֵל, אַל לַמְלָכִים שְׁתוֹ <span style='text-decoration: underline;'>יָיִן</span>, וּלְרוֹזְנִים <small>או</small>שֵׁכָר. פֶּן יִשְׁתֶּה וְיִשְׁכַּח מְחֻקָּק, וִישַׁנֶּה דִּין כָּל בְּנֵי עֹנִי";
+		//$contents = "אַל לַמְלָכִים, לְמוֹאֵל, אַל לַמְלָכִים שְׁתוֹ <span style='text-decoration: underline;'>יָיִן</span>, וּלְרוֹזְנִים או שֵׁכָר. פֶּן יִשְׁתֶּה וְיִשְׁכַּח מְחֻקָּק, וִישַׁנֶּה דִּין כָּל בְּנֵי עֹנִי";
+		print "<p>$contents</p>\n";
+		$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
+		print "<p>$contents</p>\n";
+		$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
+		print "<p>$contents</p>\n";
+		$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
+		print "<p>$contents</p>\n";
+	}
+	
 	test1();
 	test2();
 	test3();
