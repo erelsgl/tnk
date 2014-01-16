@@ -19,3 +19,6 @@ A set of tools for navigating in the TNK (Tora Neviim Ktuvim)
 
 ## Use
 * Go to http://localhost/tnk/findpsuq.php
+
+## License
+LGPL
