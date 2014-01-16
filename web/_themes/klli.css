@@ -29,8 +29,6 @@ a:active, body a:hover {
 
 /* logo */
 
-/*h1 { background-image: url('logo60.gif'); background-repeat:no-repeat; background-position:right; }*/
-
 img.logo {
     position:absolute; right:3em; top:2em; text-decoration:none; border:none
 }
@@ -246,20 +244,8 @@ a.la_pwrsm {background: #ffcc00}
 body.la_pwrsm {background: #ffbb00; padding: 0.5cm}
 a.psuq {font-size:10px}
 
-/*
-body.azwr, body.kll_azwr {
-	background-image: url(israel_sat.jpg) 
-}
-
-body.awsp_twspt {background: url(future_city_big.jpg)}
-*/
-
 a.cywr img {float:none; margin:10px}
-/*
-body.mbnh1, body.mbnh2 {
-	background-image:url(green_castle.jpg)
-}
-*/
+
 
 body.jyr {
 	background-image:url(tw.gif);
