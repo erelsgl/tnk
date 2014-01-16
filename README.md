@@ -15,10 +15,14 @@ A set of tools for navigating in the TNK (Tora Neviim Ktuvim)
 * Run the create script:
 	php <full-path-to-repository>/admin/create.php
 * Enter your MySQL username and password, and a name of a database for creating required tables.
-* Make sure there are no errors.
+* Verify that there are no errors in the output.
 
 ## Use
 * Go to http://localhost/tnk/findpsuq.php
+
+## Code
+* **script/findpsuq_lib.php** - functions for searching regular expressions in the Tanakh verses. 
+* **script/niqud.php** - functions for adding dots ("niqud") to Tanakh verses.
 
 ## License
 LGPL
