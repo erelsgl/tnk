@@ -7,6 +7,10 @@
 error_reporting(E_ALL);
 set_time_limit(0);
 
+if (!defined("STDIN")) {
+	die("Please run create.php from the console - not from a web-browser!");
+}
+
 print "
 # Create a new database for Tanakh Navigation Kit
 
@@ -37,7 +41,7 @@ function show_create_page() {
 ## Credentials
 
 ";
-	$_POST['db_host'] = $GLOBALS['db_host'];
+	$_POST['db_host'] = "localhost";
 	print "MySQL username [$GLOBALS[db_user]]: "; $db_user = trim(fgets(STDIN));
 	$_POST['db_user'] = $db_user? $db_user: $GLOBALS['db_user'];
 	print "MySQL password: "; $db_pass = trim(fgets(STDIN));
