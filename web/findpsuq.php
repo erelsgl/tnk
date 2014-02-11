@@ -2,11 +2,10 @@
 error_reporting(E_ALL);
 
 /**
- * @file findpsuq.php
- * Windows Encoding χιγεγ ημεπεϊ
+ * UTF8 encoding - Χ§Χ™Χ“Χ•Χ“ ΧΧ—Χ™Χ“
  * Find a string in the Tanakh text.
- * @author Erel Segal ΰψΰμ ρβμ
- * @date 2009-08-05
+ * @author Erel Segal ΧΧ¨ΧΧ Χ΅Χ’Χ
+ * @since 2009-08-05
  */
 
 $linkroot = "http://tora.us.fm";
@@ -24,21 +23,21 @@ $phrase_html = htmlspecialchars($phrase,ENT_QUOTES);
 $niqud_level = (!empty($_GET['niqud'])? 1: 0);
 $reverse = !empty($_GET['reverse']);
 
-$title = $phrase? "*$phrase - πιεεθ αϊπκ": "πιεεθ αϊπκ*";
+$title = $phrase? "*$phrase - Χ Χ™Χ•Χ•Χ Χ‘ΧªΧ Χ": "Χ Χ™Χ•Χ•Χ Χ‘ΧªΧ Χ*";
 
 require("find_header.php");
 print "
 <div id='top'>
 	<div class='center'>
-		<h1><a href='$linkroot/tnk1'><img src='_themes/logo3.png' alt='ϊεφΰεϊ δπιεεθ αϊπκ' title='ϊεφΰεϊ δπιεεθ αϊπκ' /></a></h1>
+		<h1><a href='$linkroot/tnk1'><img src='_themes/logo3.png' alt='ΧªΧ•Χ¦ΧΧ•Χª Χ”Χ Χ™Χ•Χ•Χ Χ‘ΧªΧ Χ' title='ΧªΧ•Χ¦ΧΧ•Χª Χ”Χ Χ™Χ•Χ•Χ Χ‘ΧªΧ Χ' /></a></h1>
 		<form method='get' action=''>
-			διςγ:
+			Χ”Χ™ΧΆΧ“:
 			<input id='find' name='q' value='$phrase_html' />
-			".($single_verse? "<input type='checkbox' name='single_verse' checked='checked' />ψχ τρεχ ΰηγ ": "")."<br/>
-			<input type='checkbox' name='niqud' ".($niqud_level? " checked='checked'": "")." />ςν&nbsp;πιχεγ 
-			<input type='checkbox' name='sikum' ".(!empty($_GET['sikum'])? " checked='checked'": "")." />ςν&nbsp;ριλεν 
-			<input type='checkbox' name='reverse' />μΰηεψ
-			<input type='submit' value='ητω!' />
+			".($single_verse? "<input type='checkbox' name='single_verse' checked='checked' />Χ¨Χ§ Χ¤Χ΅Χ•Χ§ ΧΧ—Χ“ ": "")."<br/>
+			<input type='checkbox' name='niqud' ".($niqud_level? " checked='checked'": "")." />ΧΆΧ&nbsp;Χ Χ™Χ§Χ•Χ“ 
+			<input type='checkbox' name='sikum' ".(!empty($_GET['sikum'])? " checked='checked'": "")." />ΧΆΧ&nbsp;Χ΅Χ™Χ›Χ•Χ 
+			<input type='checkbox' name='reverse' />ΧΧΧ—Χ•Χ¨
+			<input type='submit' value='Χ—Χ¤Χ©!' />
 		</form>
 	</div><!--center-->
 </div><!--top-->
@@ -55,7 +54,7 @@ if ($phrase) {
 	print "
 <div id='results'>
 	<div id='findpsuq'>
-	<h2>ϊεφΰεϊ ηιτεω αιθει ψβεμψι αϊπ&quot;κ</h2>
+	<h2>ΧªΧ•Χ¦ΧΧ•Χª Χ—Χ™Χ¤Χ•Χ© Χ‘Χ™ΧΧ•Χ™ Χ¨Χ’Χ•ΧΧ¨Χ™ Χ‘ΧªΧ &quot;Χ</h2>
 	<ol>$findpsuq_results</ol>
 	</div><!--findpsuq-->
 </div><!--results-->

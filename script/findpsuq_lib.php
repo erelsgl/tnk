@@ -1,8 +1,9 @@
 <?php
 
-/** Windows encoding ÷éãåã çìåğåú
+/** 
+ * UTF8 encoding ×§×™×“×•×“ ××—×™×“
  * @file findpsuq_lib.php - functions for finding text in verses
- * @author Erel Segal àøàì ñâì
+ * @author Erel Segal ××¨××œ ×¡×’×œ
  */
 
 require_once("../admin/db_connect.php");
@@ -30,7 +31,7 @@ function fix_regexp($phrase) {
 function regexp_error ($phrase) {
 	try {
 		if (@preg_match("/$phrase/", "")===FALSE)
-			return "ùâéàú úçáéø";
+			return "×©×’×™××ª ×ª×—×‘×™×¨";
 		else
 			return "";
 	} catch (Exception $e) {
@@ -64,7 +65,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 		$ktovt_sikum = $verse['ktovt_sikum'];
 
 		$verse_text_bli_niqud =
-			preg_replace("/éäåä/", "ä'",
+			preg_replace("/×™×”×•×”/", "×”'",
 			preg_replace("/<b>.*<\/b>/","",
 			$verse_text));
 
@@ -77,7 +78,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 
 			$result .= cite_link_item($anchor, $verse_text_bli_niqud, $ktovt_trgum, $ktovt_sikum, $niqud_level);
 
-			$result_wikisource .= "* {{öî|$verse_text_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
+			$result_wikisource .= "* {{×¦×|$verse_text_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
 
 			$kotrt_qodmt=""; $ktovt_qodm=""; $mspr_psuq_qodm=""; $verse_text_bli_niqud_qodmt="";
 			# if there is a match in this verse, don't keep this verse for checking it's combination with the next verse
@@ -94,7 +95,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 
 					$result .= cite_link_item($anchor, $jtei_jurot_bli_niqud, $ktovt_trgum, $ktovt_sikum, $niqud_level);
 
-					$result_wikisource .= "* {{öî|$jtei_jurot_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
+					$result_wikisource .= "* {{×¦×|$jtei_jurot_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
 				}
 			}
 			list($kotrt_qodmt, $ktovt_qodm, $mspr_psuq_qodm, $verse_text_bli_niqud_qodmt) = array($kotrt, $ktovt, $mspr_psuq, $verse_text_bli_niqud);
@@ -137,11 +138,11 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
 	global $linkroot, $newline;
 
 	$mamr_anchor = ($ktovt_trgum?
-		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$linkroot/")."$ktovt_trgum'>ôéøåè</a>":
+		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$linkroot/")."$ktovt_trgum'>×¤×™×¨×•×˜</a>":
 		"");
 
 	$sikum_anchor = (isset($_GET['sikum'])?
-		"<a href='$linkroot/tnk1/sikum.php?$ktovt_sikum&utf8=1&find=1'>ñéëåí</a>": 
+		"<a href='$linkroot/tnk1/sikum.php?$ktovt_sikum&utf8=1&find=1'>×¡×™×›×•×</a>": 
 		"");
 
 	$trgum_anchor = (
@@ -172,20 +173,20 @@ function find_phrase($phrase, $single_verse, $niqud_level) {
 
 	//If the phrase contains niqud, look in the table of verses with niqud.
 	//	-- This currently does not work, because of encoding. The input encoding is hebrew, but the database is utf8 :(
-	//if (preg_match("/[ÇÈÆÅÉÌÄË]/",$phrase))  
+	//if (preg_match("/[Ö·Ö¸Ö¶ÖµÖ¹Ö¼Ö´Ö»]/",$phrase))  
 	//	$findpsuq_table = "findpsuq_niqud"; 
 	$newline = "\n";
 	$fullbody = '';
 	$count = 0;
 	$e = regexp_error($phrase);
 	if ($e) {
-		$fullbody .= "<p>äæğú áéèåé øâåìøé ùâåé. äåãòú äùâéàä äéà:</p>";
+		$fullbody .= "<p>×”×–× ×ª ×‘×™×˜×•×™ ×¨×’×•×œ×¨×™ ×©×’×•×™. ×”×•×“×¢×ª ×”×©×’×™××” ×”×™×:</p>";
 		$fullbody .= "<div dir='ltr'>$e</div>";
 		$match_count = 0;
 	} else {
 		$emphasize_phrase = TRUE;
 		mysql_query("set character_set_client=hebrew");
-		if (preg_match("/^[à-ú ]*$/",$phrase))  { // If we look for a simple phrase, not a regexp - approximate the result count:
+		if (preg_match("/^[×-×ª ]*$/",$phrase))  { // If we look for a simple phrase, not a regexp - approximate the result count:
 			$approximate_result_count = sql_evaluate("SELECT COUNT(*) FROM $findpsuq_table WHERE verse_text LIKE '%$phrase%'");
 			$emphasize_phrase = ($approximate_result_count>=2);
 		}

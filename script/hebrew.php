@@ -1,29 +1,30 @@
 <?php
 
-/**
- * @file hebrew.php handle Hebrew-specific actions like "gimatriya" - χιγεγ ημεπεϊ
- * 
+/** 
+ * UTF8 encoding Χ§Χ™Χ“Χ•Χ“ ΧΧ—Χ™Χ“
+ * @file hebrew.php handle Hebrew-specific actions like "gimatriya" - Χ§Χ™Χ“Χ•Χ“ Χ—ΧΧ•Χ Χ•Χª
+ * @author Erel Segal ΧΧ¨ΧΧ Χ΅Χ’Χ
  */
 
 ### Hebrew letters ###
-$otiot_txiliot = "ΰαβγδεζηθιλμξπρςτφχψωϊ";
-$otiot_ivriot = "ΰαβγδεζηθικλμνξοπρςστυφχψωϊ";
+$otiot_txiliot = "ΧΧ‘Χ’Χ“Χ”Χ•Χ–Χ—ΧΧ™Χ›ΧΧΧ Χ΅ΧΆΧ¤Χ¦Χ§Χ¨Χ©Χª";
+$otiot_ivriot = "ΧΧ‘Χ’Χ“Χ”Χ•Χ–Χ—ΧΧ™ΧΧ›ΧΧΧΧΧ Χ΅ΧΆΧ£Χ¤Χ¥Χ¦Χ§Χ¨Χ©Χª";
 
 ### regular expressions for Hebrew numbers ###
-$hebchar1 = "[ΰ-θ]";
-$hebchar2 = "[ι-φ]";
-$hebchar3 = "[χ-ϊ]";
-$hebchar="[ΰ-ϊ]";
+$hebchar1 = "[Χ-Χ]";
+$hebchar2 = "[Χ™-Χ¦]";
+$hebchar3 = "[Χ§-Χª]";
+$hebchar="[Χ-Χª]";
 
 $hebnum1 = $hebchar1;
-$hebnum2 = "(?:θε|θζ|$hebchar2|$hebchar2$hebnum1)";
-$hebnum12 = "(?:θε|θζ|$hebchar2|(?:$hebchar2$hebnum1)|$hebnum1)";
+$hebnum2 = "(?:ΧΧ•|ΧΧ–|$hebchar2|$hebchar2$hebnum1)";
+$hebnum12 = "(?:ΧΧ•|ΧΧ–|$hebchar2|(?:$hebchar2$hebnum1)|$hebnum1)";
 $hebnum3 = "$hebchar3$hebnum12?";
 $hebnum = "(?:$hebnum12|$hebnum3)";
 
 
 $values = array (1,2,3,4,5,6,7,8,9,10,20,20,30,40,40,50,50,60,70,80,80,90,90,100,200,300,400);
-$ALEF = ord("ΰ");
+$ALEF = ord("Χ");
 # return the value of its argument in "gimatriya"
 function hebrew2number($hebrew) {
 	global $values, $ALEF;
@@ -37,16 +38,16 @@ function hebrew2number($hebrew) {
 	return $sum;
 }
 
-$letters1 = array('ΰ','α','β','γ','δ','ε','ζ','η','θ','ι');
+$letters1 = array('Χ','Χ‘','Χ’','Χ“','Χ”','Χ•','Χ–','Χ—','Χ','Χ™');
 $letters2 = array(
-	array('ι','λ','μ','ξ','π','ρ','ς','τ','φ','χ'),
-	array('ι','κ','μ','ν','ο','ρ','ς','σ','υ','χ'));
-$letters3 = array('χ','ψ','ω','ϊ');
+	array('Χ™','Χ›','Χ','Χ','Χ ','Χ΅','ΧΆ','Χ¤','Χ¦','Χ§'),
+	array('Χ™','Χ','Χ','Χ','Χ','Χ΅','ΧΆ','Χ£','Χ¥','Χ§'));
+$letters3 = array('Χ§','Χ¨','Χ©','Χª');
 function number2hebrew($num, $sofiot=false) {
 	global $letters1, $letters2, $letters3;
 	$heb = "";
 	while ($num > 400) {
-		$heb .= "ϊ";
+		$heb .= "Χª";
 		$num -= 400;
 	}
 	if ($num >= 100) {
@@ -55,10 +56,10 @@ function number2hebrew($num, $sofiot=false) {
 	}
 	if ($num >= 10) {
 		if ($num == 15) {
-			$heb .= "θε";
+			$heb .= "ΧΧ•";
 			$num = 0;
 		} elseif ($num == 16) {
-			$heb .= "θζ";
+			$heb .= "ΧΧ–";
 			$num = 0;
 		} else {
 			$heb .= $letters2[$sofiot][ floor($num / 10) - 1 ];
@@ -79,7 +80,7 @@ function number2hebrew($num, $sofiot=false) {
  */
 function hebrew2latin($hebrew) {
 	$hebrew = strtr($hebrew,
-		" ΰαβγδεζηθιλκμνξορςτσφυχψωϊ",
+		" ΧΧ‘Χ’Χ“Χ”Χ•Χ–Χ—ΧΧ™Χ›ΧΧΧΧΧΧ΅ΧΆΧ¤Χ£Χ¦Χ¥Χ§Χ¨Χ©Χª",
 		"_ABGDHWZXFYKKLMMNNSEPPCCQRJT");
 	return $hebrew;
 }
@@ -90,13 +91,13 @@ function hebrew2latin($hebrew) {
 function latin2hebrew($latin) {
 	$hebrew = strtr($latin,
 		"ABGDHWZXFYKLMNSEPCQRJT",
-		"ΰαβγδεζηθιλμξπρςτφχψωϊ");
+		"ΧΧ‘Χ’Χ“Χ”Χ•Χ–Χ—ΧΧ™Χ›ΧΧΧ Χ΅ΧΆΧ¤Χ¦Χ§Χ¨Χ©Χª");
 
-	$hebrew = replace_at_end_of_word("λ", "κ", $hebrew);
-	$hebrew = replace_at_end_of_word("ξ", "ν", $hebrew);
-	$hebrew = replace_at_end_of_word("π", "ο", $hebrew);
-	$hebrew = replace_at_end_of_word("τ", "σ", $hebrew);
-	$hebrew = replace_at_end_of_word("φ", "υ", $hebrew);
+	$hebrew = replace_at_end_of_word("Χ›", "Χ", $hebrew);
+	$hebrew = replace_at_end_of_word("Χ", "Χ", $hebrew);
+	$hebrew = replace_at_end_of_word("Χ ", "Χ", $hebrew);
+	$hebrew = replace_at_end_of_word("Χ¤", "Χ£", $hebrew);
+	$hebrew = replace_at_end_of_word("Χ¦", "Χ¥", $hebrew);
 
 	return $hebrew;
 }
@@ -189,7 +190,7 @@ function windows1255_to_utf8($windows1255) {
 		if (strpos($otiot_ivriot,$char)!==false) {
 			$prefix = 214;
 			$suffix = ord($char)-16;
-		} elseif (strpos($char,"/ΘΗΖΔΐΙΜ/")!==false) {
+		} elseif (strpos($char,"/ΦΈΦ·Φ¶Φ΄Φ°ΦΉΦΌ/")!==false) {
 			$prefix = 215;
 			$suffix = ord($char)-80;
 		} else {
@@ -209,13 +210,13 @@ function compare_hebrew_numbers($a, $b) {
 
 /*
 function to_txiliot($string) {
-   $string =~ tr!κνοσυ!λξπτφ!;
+   $string =~ tr!ΧΧΧΧ£Χ¥!Χ›ΧΧ Χ¤Χ¦!;
    return $string;
 }
 
 function to_sofiot($string) {
    $string = $_[0];
-   $string =~ tr!λξπτφ!κνοσυ!;
+   $string =~ tr!Χ›ΧΧ Χ¤Χ¦!ΧΧΧΧ£Χ¥!;
    return $string;
 }
 */
