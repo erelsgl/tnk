@@ -1,7 +1,8 @@
-<?php
+﻿<?php
 
 /**
- * UTF8 encoding - קידוד אחיד
+ * @file niqud.php
+ * Windows Encoding קידוד חלונות
  * Functions for adding dots (NIQQUD) to Tanakh verses
  * @author Erel Segal אראל סגל
  * @date 2009-08-05
@@ -10,9 +11,10 @@
 require_once("hebrew.php");
 require_once("../admin/db_connect.php");
 
-global $NOTLETTER, $WORDBOUND;
+global $NOTLETTER, $WORDBOUND, $winnolet;
 $NOTLETTER = "[^א-ת]";
 $WORDBOUND = "[ \t\n<>.;:,'\"!?]";  // Don't include []
+$winnolet =utf8_to_windows1255($NOTLETTER);
 
 /** 
  * Add niqud to the first $limit psuqim in $contents. (set $limit=-1 to convert all)
@@ -72,7 +74,7 @@ function niqud_psuqim($contents, $limit=1) {
  * Add niqud to a single verse. Used as callback by regexp searcher in niqud_psuqim. 
  */
 function niqud_psuq($matches) {
-	global $NOTLETTER, $WORDBOUND;
+	global $winnolet, $WORDBOUND;
 
 	$contents = $matches[0];
 	$qod_sfr_quoted = quote_all($matches[1]);
@@ -99,10 +101,12 @@ function niqud_psuq($matches) {
 	foreach ($words as $word_number => &$word_im_niqud) {
 		$word_im_niqud = utf8_to_windows1255(preg_replace("/\s+/","",$word_im_niqud));
 
-		$word_bli_niqud = preg_replace("/$NOTLETTER/","",$word_im_niqud);
+		$word_bli_niqud = preg_replace("/$winnolet/","",$word_im_niqud);
+		$word_im_niqud = windows1255_to_utf8($word_im_niqud);
+		$word_bli_niqud = windows1255_to_utf8($word_bli_niqud);
 
 		if (strpos($word_im_niqud,"small")) { // ktiv - כתיב
-			$word_im_niqud = preg_replace("#</?small>#","",$word_im_niqud) . utf8_to_windows1255($words[$word_number+1]);
+			$word_im_niqud = preg_replace("#</?small>#","",$word_im_niqud) . /*utf8_to_windows1255*/($words[$word_number+1]);
 		}
 
 		$citut_mnuqd = preg_replace("/($WORDBOUND)$word_bli_niqud($WORDBOUND)/", "$1$word_im_niqud$2", $citut_mnuqd, 1);

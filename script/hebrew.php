@@ -1,9 +1,8 @@
-<?php
+﻿<?php
 
-/** 
- * UTF8 encoding קידוד אחיד
+/**
  * @file hebrew.php handle Hebrew-specific actions like "gimatriya" - קידוד חלונות
- * @author Erel Segal אראל סגל
+ * 
  */
 
 ### Hebrew letters ###
@@ -116,11 +115,11 @@ function utf8_to_windows1255($utf8) {
 			$utf8[$key] = utf8_to_windows1255($value);
 		return $utf8;
 	}
-	
+	/*
 	if (preg_match("/\\[(.*)\\]/", $utf8, $matches)) {
 		//print "<p>brackets</p>";
 		return "[".utf8_to_windows1255($matches[1])."]";
-	}
+	}*/
 
 	//@see http://stackoverflow.com/a/6723593/827927
 	$isUTF8 = mb_check_encoding($utf8, 'utf-8'); //preg_match('//u', $utf8);

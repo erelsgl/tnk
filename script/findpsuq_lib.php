@@ -7,6 +7,7 @@
  */
 
 require_once("../admin/db_connect.php");
+require_once("$SCRIPT/niqud.php");  // for adding dots (niqud) to the displayed verses
 
 /**
  * Fix some common mistakes users do when entering regular expressions for searching:
@@ -46,15 +47,16 @@ function regexp_error ($phrase) {
  * @param $phrase the regular expression to search.
  * @param $emphasize_phrase boolean true to make the search phrase boldface. 
  * @param $single_verse boolean true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
- * @param $niqud_level boolean true to add dots (niqud) to the emphasized verses.
+ * @param $add_niqud boolean true to add dots (niqud) to the emphasized verses.
  */ 
-function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud_level=0) {
+function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0) {
 	global $linkroot, $newline;
 	$result = '';
 	$result_wikisource = '';
 	$kotrt_qodmt=""; $ktovt_qodm=""; $mspr_psuq_qodm=""; $verse_text_bli_niqud_qodmt="";
 
 	$match_count = 0;
+	$phrase = utf8_to_windows1255($phrase);
 	while ($verse = sql_fetch_assoc($verses)) {
 		$kotrt = $verse['kotrt'];
 		$ktovt = $verse['ktovt'];
@@ -64,19 +66,21 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 		$ktovt_trgum = $verse['ktovt_trgum'];
 		$ktovt_sikum = $verse['ktovt_sikum'];
 
-		$verse_text_bli_niqud =
+		$verse_text_bli_niqud_utf8 =
 			preg_replace("/יהוה/", "ה'",
 			preg_replace("/<b>.*<\/b>/","",
 			$verse_text));
 
+		$verse_text_bli_niqud = utf8_to_windows1255($verse_text_bli_niqud_utf8);
+
 		if (preg_match("/$phrase/",$verse_text_bli_niqud)) {
 			list($verse_text_bli_niqud, $verse_text_bli_niqud_wikisource) = emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase);
-
+			$verse_text_bli_niqud_utf8 = windows1255_to_utf8($verse_text_bli_niqud);
 			++$match_count;
 
 			$anchor = "<a class='psuq' href='$linkroot/tnk1/$ktovt#$mspr_psuq'>$kotrt$mspr_psuq</a>";
 
-			$result .= cite_link_item($anchor, $verse_text_bli_niqud, $ktovt_trgum, $ktovt_sikum, $niqud_level);
+			$result .= cite_link_item($anchor, $verse_text_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 
 			$result_wikisource .= "* {{צמ|$verse_text_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
 
@@ -86,14 +90,16 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$niqud
 			if ($verse_text_bli_niqud_qodmt && !$single_verse) {
 				$jtei_jurot_bli_niqud = "$verse_text_bli_niqud_qodmt $verse_text_bli_niqud";
 				if (preg_match("/$phrase/",$jtei_jurot_bli_niqud)) {
-					list($jtei_jurot_bli_niqud, $jtei_jurot_bli_niqud_wikisource) = emphasize_phrase_if_needed($jtei_jurot_bli_niqud, $phrase, $emphasize_phrase);
+					list($jtei_jurot_bli_niqud, $jtei_jurot_bli_niqud_wikisource) = emphasize_phrase_if_needed ($jtei_jurot_bli_niqud, $phrase, $emphasize_phrase);
 
 					++$match_count;
-
+                                        
+					$jtei_jurot_bli_niqud_utf8 = windows1255_to_utf8($jtei_jurot_bli_niqud);
+                                        
 					#using "#mspr_psuq and _blank" causes a strange error on some instances of MSIE (see above)
-					$anchor = "<a class='psuq' href='$linkroot/$site/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
+					$anchor = "<a class='psuq' href='$linkroot/tnk1/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
 
-					$result .= cite_link_item($anchor, $jtei_jurot_bli_niqud, $ktovt_trgum, $ktovt_sikum, $niqud_level);
+					$result .= cite_link_item($anchor, $jtei_jurot_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 
 					$result_wikisource .= "* {{צמ|$jtei_jurot_bli_niqud_wikisource|$kotrt $ot_psuq}}\n";
 				}
@@ -134,7 +140,7 @@ function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_p
  * Create an HTML LI element with the given verse.
  * @return string
  */
-function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, $niqud_level) {
+function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, $add_niqud) {
 	global $linkroot, $newline;
 
 	$mamr_anchor = ($ktovt_trgum?
@@ -155,8 +161,8 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
 		<li><!--m-->
 			$verse_anchor: \"<q class='psuq'>$verse_text</q>\"<!--n-->".$trgum_anchor."
 		</li>$newline";
-	if ($niqud_level)
-		$item = niqud_psuqim($item, $niqud_level);
+	if ($add_niqud)
+		$item = niqud_psuqim($item, $add_niqud);
 	return $item;
 }
 
@@ -166,10 +172,11 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * 
  * @param $phrase the regular expression to look for.
  * @param $single_verse [boolean] - true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
- * @param $niqud_level [boolean] - true to display the verses with dots ("niqud"). NOTE: This currently does not affect the search (i.e. the search is in the undotted version).
+ * @param $add_niqud [boolean] - true to display the verses with dots ("niqud").
+ * @param $find_niqud [boolean] true to find the expression in the dotted (mnuqad) version of the verses.
  */ 
-function find_phrase($phrase, $single_verse, $niqud_level) {
-	$findpsuq_table = "findpsuq";
+function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
+	$findpsuq_table = $find_niqud? "findpsuq_mnqd" : "findpsuq";
 
 	//If the phrase contains niqud, look in the table of verses with niqud.
 	//	-- This currently does not work, because of encoding. The input encoding is hebrew, but the database is utf8 :(
@@ -185,27 +192,29 @@ function find_phrase($phrase, $single_verse, $niqud_level) {
 		$match_count = 0;
 	} else {
 		$emphasize_phrase = TRUE;
-		mysql_query("set character_set_client=hebrew");
-		if (preg_match("/^[א-ת ]*$/",$phrase))  { // If we look for a simple phrase, not a regexp - approximate the result count:
+
+		mysql_query("set character_set_client=utf8"); //changed from 'hebrew'
+		/*
+			if (preg_match("/^[א-ת ]*$/",$phrase))  { // If we look for a simple phrase, not a regexp - approximate the result count:
 			$approximate_result_count = sql_evaluate("SELECT COUNT(*) FROM $findpsuq_table WHERE verse_text LIKE '%$phrase%'");
 			$emphasize_phrase = ($approximate_result_count>=2);
-		}
+		}*/
 
 		mysql_query("set character_set_client=utf8");
-		mysql_query("set character_set_results=hebrew");
+		mysql_query("set character_set_results=utf8"); //changed from 'hebrew'
 		mysql_query("set character_set_database=utf8");
 
 		if (!preg_match("/[(]/",$phrase) && preg_match("/[|]/",$phrase) ) {
 			$subphrases = explode("|",$phrase);
 			foreach ($subphrases as $subphrase) {
 				$verses = sql_query_or_die("SELECT * FROM $findpsuq_table");
-				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $niqud_level);
+				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud);
 				$fullbody .= "<h2>$subphrase</h2>\n";
 				$fullbody .= $results;
 			}
 		} else {
 			$verses = sql_query_or_die("SELECT * FROM $findpsuq_table");
-			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $niqud_level);
+			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud);
 			$fullbody .= $results;
 		}
 		if ($fullbody)
