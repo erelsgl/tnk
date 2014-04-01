@@ -39,10 +39,10 @@ function get_ascending_rows($phrase_quoted, $limit=5) {
  * @param $row a quadruple ($qod, $kotrt, $sug, $ktovt) from QLT_mfxt table
  */
 function get_mftx_line($row) {
-	global $path_from_root_to_site;
+	global $linkroot;
 	list ($qod, $kotrt, $sug, $ktovt) = $row;
 	$class = hebrew2latin($sug);
-	$ktovt = htmlspecialchars("../$ktovt");
+	$ktovt = htmlspecialchars("$linkroot/$ktovt");
 	$sug = str_replace("_"," ",$sug);
 	$kotrt = str_replace(":", ";", $kotrt);
 

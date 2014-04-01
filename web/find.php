@@ -113,7 +113,7 @@ if ($phrase) {
 		";
 	
 	if ($mxbr_results) $mxbr_results = "
-		<script type='text/javascript' src='../_script/sorttable.js'></script>
+		<script type='text/javascript' src='sorttable.js'></script>
 		<style type='text/css'>
 		#mxbr_table td, #mxbr_table th {padding:2px; vertical-align:center}
 		#mxbr_table td.tarik_hosfa {font-size:10px}
@@ -168,8 +168,8 @@ if ($phrase) {
 		<div id='tips'>
 		<h2>לא מה שחיפשת?</h2>
 		<ul>
-		<li><a href='/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
-		</ul>
+		<li><a href='$linkroot/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
+		</ul>4
 		</div><!--tips-->
 		";
 }
@@ -191,6 +191,7 @@ function mftx_recommended_results($phrase_utf8_quoted) {
 
 
 function mxbr_results($phrase_utf8_quoted) {
+	global $linkroot;
 	sql_query_or_die("SET @sdr=0");
 	$rows = sql_query_or_die("
 			SELECT @sdr:=@sdr+1 AS sdr, tarik_hosfa, ktovt, kotrt FROM prt_tnk1
@@ -208,7 +209,7 @@ function mxbr_results($phrase_utf8_quoted) {
 			$results = "<tr>
 			<td class='sdr'>$row[sdr]</td>
 			<td class='tarik_hosfa'>$row[tarik_hosfa]</td>
-			<td class='kotrt'><a href='../$row[ktovt]'>$row[kotrt]</a></td>
+			<td class='kotrt'><a href='$linkroot/$row[ktovt]'>$row[kotrt]</a></td>
 			</tr>" . $results;
 		}
 		return array($results,$count);
