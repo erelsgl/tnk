@@ -132,7 +132,7 @@ function create_db_connect_params() {
 \$GLOBALS['db_user'] = \$db_user = '$_POST[db_user]';
 \$GLOBALS['db_pass'] = \$db_pass = '$_POST[db_pass]';
 \$GLOBALS['db_name'] = \$db_name = '$_POST[db_name]';
-\$GLOBALS['BACKUP_FILEROOT'] = str_replace('admin','data_utf8',dirname(__FILE__));
+\$GLOBALS['BACKUP_FILEROOT'] = str_replace('admin','data',dirname(__FILE__));
 ?".">")  /* put dirname inside the ""! */
 or die ("Can't create db_connect_params");
 }
@@ -142,7 +142,7 @@ or die ("Can't create db_connect_params");
  * Create the database tables based on the data_utf8 folder.
  */
 function create_database_tables() {
-	$configuration_tables = array("psuqim", "psuqim_niqud_milim", "sfrim", "prqim", "trgumim_im_ktovt");
+	$configuration_tables = array("psuqim", "psuqim_niqud_milim", "sfrim", "prqim", "trgumim_im_ktovt", "QLT_mftx". "prt_tnk1", "board_tnk1");
 	foreach ($configuration_tables as $table)
 		restore_table($table);	
 }

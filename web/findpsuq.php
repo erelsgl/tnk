@@ -3,10 +3,10 @@ error_reporting(E_ALL);
 
 /**
  * @file findpsuq.php
- * Windows Encoding קידוד חלונות
+ * ֹUTF8 Encoding קידוד אחיד
  * Find a string in the Tanakh text.
  * @author Erel Segal אראל סגל
- * @date 2009-08-05
+ * @date 2009-2014
  */
 
 $linkroot = "http://tora.us.fm";
@@ -51,10 +51,10 @@ print "
 
 
 if ($phrase) {
-  $fixed_phrase = fix_regexp($phrase);
-  if ($reverse)
-    $fixed_phrase = strrev($fixed_phrase);
-
+	$fixed_phrase = fix_regexp($phrase);
+	if ($reverse)
+		$fixed_phrase = strrev($fixed_phrase);
+	
 	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $find_niqud);
 
 	print "
