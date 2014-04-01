@@ -58,8 +58,8 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 	$match_count = 0;
 	$phrase = utf8_to_windows1255($phrase);
 	while ($verse = sql_fetch_assoc($verses)) {
-		$kotrt = $verse['kotrt'];
-		$ktovt = $verse['ktovt'];
+		$kotrt = $verse['book_name']." ".$verse['chapter_letter'];
+		$ktovt = $verse['ktovt_prq'];
 		$mspr_psuq = $verse['verse_number'];
 		$ot_psuq = $verse['verse_letter'];
 		$verse_text = $verse['verse_text'];
@@ -70,7 +70,6 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 			preg_replace("/יהוה/", "ה'",
 			preg_replace("/<b>.*<\/b>/","",
 			$verse_text));
-
 		$verse_text_bli_niqud = utf8_to_windows1255($verse_text_bli_niqud_utf8);
 
 		if (preg_match("/$phrase/",$verse_text_bli_niqud)) {
@@ -176,12 +175,9 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * @param $find_niqud [boolean] true to find the expression in the dotted (mnuqad) version of the verses.
  */ 
 function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
-	$findpsuq_table = $find_niqud? "findpsuq_mnqd" : "findpsuq";
-
 	//If the phrase contains niqud, look in the table of verses with niqud.
 	//	-- This currently does not work, because of encoding. The input encoding is hebrew, but the database is utf8 :(
-	//if (preg_match("/[ִֵֶַָֹֻּ]/",$phrase))  
-	//	$findpsuq_table = "findpsuq_niqud"; 
+	//$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
 	$newline = "\n";
 	$fullbody = '';
 	$count = 0;
@@ -193,7 +189,7 @@ function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
 	} else {
 		$emphasize_phrase = TRUE;
 
-		mysql_query("set character_set_client=utf8"); //changed from 'hebrew'
+		mysql_query("set character_set_client=utf8");
 		/*
 			if (preg_match("/^[א-ת ]*$/",$phrase))  { // If we look for a simple phrase, not a regexp - approximate the result count:
 			$approximate_result_count = sql_evaluate("SELECT COUNT(*) FROM $findpsuq_table WHERE verse_text LIKE '%$phrase%'");
@@ -204,16 +200,25 @@ function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
 		mysql_query("set character_set_results=utf8"); //changed from 'hebrew'
 		mysql_query("set character_set_database=utf8");
 
+		$query = "
+					SELECT 
+						psuqim.*, 
+						".($find_niqud? "text_niqud": "text_otiot")." as verse_text,
+						trgumim_im_ktovt.ktovt AS ktovt_trgum
+					FROM psuqim
+					LEFT JOIN trgumim_im_ktovt 
+					ON(psuqim.id=trgumim_im_ktovt.verse_id)
+					"; 
 		if (!preg_match("/[(]/",$phrase) && preg_match("/[|]/",$phrase) ) {
 			$subphrases = explode("|",$phrase);
 			foreach ($subphrases as $subphrase) {
-				$verses = sql_query_or_die("SELECT * FROM $findpsuq_table");
+				$verses = sql_query_or_die($query);
 				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud);
 				$fullbody .= "<h2>$subphrase</h2>\n";
 				$fullbody .= $results;
 			}
 		} else {
-			$verses = sql_query_or_die("SELECT * FROM $findpsuq_table");
+			$verses = sql_query_or_die($query);
 			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud);
 			$fullbody .= $results;
 		}
