@@ -36,7 +36,9 @@ function show_create_page() {
 	set_coalesce($GLOBALS['db_name'], coalesce($GLOBALS['db_name'],''));
 	set_coalesce($GLOBALS['db_user'], coalesce($GLOBALS['db_user'],''));
 	set_coalesce($GLOBALS['db_pass'], coalesce($GLOBALS['db_pass'],''));
-
+	set_coalesce($GLOBALS['GOOGLE_API_KEY'], coalesce($GLOBALS['GOOGLE_API_KEY'],''));
+	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
+	
 	print "
 ## Credentials
 
@@ -54,7 +56,16 @@ function show_create_page() {
 	print "New database name [$GLOBALS[db_name]]: "; $db_name = trim(fgets(STDIN));
 	$_POST['db_name'] = $db_name? $db_name: $GLOBALS['db_name'];
 	print "Drop existing database if it exists? [no]: "; $drop_db = trim(fgets(STDIN));
-	$_POST['drop_db']=($drop_db=='yes'); 
+	$_POST['drop_db']=($drop_db=='yes');
+	 
+	print "
+## Data for Google search (optional)
+
+";
+	print "Google API key [$GLOBALS[GOOGLE_API_KEY]]: "; $GOOGLE_API_KEY = trim(fgets(STDIN));
+	$_POST['GOOGLE_API_KEY'] = $GOOGLE_API_KEY? $GOOGLE_API_KEY: $GLOBALS['GOOGLE_API_KEY'];
+	print "Google CSE ID [$GLOBALS[GOOGLE_CSE_ID]]: "; $GOOGLE_CSE_ID = trim(fgets(STDIN));
+	$_POST['GOOGLE_CSE_ID'] = $GOOGLE_CSE_ID? $GOOGLE_CSE_ID: $GLOBALS['GOOGLE_CSE_ID'];
 }
 
 function update_create_page() {
@@ -133,6 +144,8 @@ function create_db_connect_params() {
 \$GLOBALS['db_pass'] = \$db_pass = '$_POST[db_pass]';
 \$GLOBALS['db_name'] = \$db_name = '$_POST[db_name]';
 \$GLOBALS['BACKUP_FILEROOT'] = str_replace('admin','data',dirname(__FILE__));
+\$GLOBALS['GOOGLE_API_KEY'] = \$GOOGLE_API_KEY = '$_POST[GOOGLE_API_KEY]';
+\$GLOBALS['GOOGLE_CSE_ID' ] = \$GOOGLE_CSE_ID = '$_POST[GOOGLE_CSE_ID]';
 ?".">")  /* put dirname inside the ""! */
 or die ("Can't create db_connect_params");
 }

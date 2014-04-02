@@ -11,11 +11,13 @@ error_reporting(E_ALL);
 
 $linkroot = "http://tora.us.fm";
 
-$SCRIPT=realpath(dirname(__FILE__)."/../script");
-require_once("$SCRIPT/psuqim.php");  // utilities related to verse ids
-require_once("$SCRIPT/findpsuq_lib.php");  // regexp search function
-require_once("$SCRIPT/mftx_lib.php");      // concept search function
-require_once("$SCRIPT/mxbr_lib.php");      // author search function
+set_include_path(realpath(dirname(__FILE__) . "/../script") . PATH_SEPARATOR . get_include_path());
+require_once("psuqim.php");  // utilities related to verse ids
+require_once("findpsuq_lib.php");  // regexp search function
+require_once("mftx_lib.php");      // concept search function
+require_once("mxbr_lib.php");      // author search function
+
+require_once("GoogleClient.php");
 
 $phrase = !empty($_GET['q'])? $_GET['q']: "";
 $single_verse = !empty($_GET['single_verse']);
@@ -75,17 +77,15 @@ if ($phrase) {
 		if ($link && $title && strpos($phrase," ")) {
 			$link = "$linkroot$link";
 	
-// 			// אם המשתמש מבקש פסוק, ויש ביאור על הפסוק - נעביר אותו ישר לביאור:
-// 			$canonical_name_of_psuq = canonical_name_of_psuq($phrase);
-// 			if ($canonical_name_of_psuq) {
-// 				$qod_of_beur = "ביאור:".$canonical_name_of_psuq;
-// 				$qod_of_beur_utf8 = iconv('hebrew', 'utf8', $qod_of_beur);
-					
-// 				$ktovt_beur = sql_evaluate("SELECT ktovt FROM prt_tnk1 WHERE qod=".quote_smart($qod_of_beur_utf8));
-// 				if ($ktovt_beur && preg_match("/^tnk1/",$ktovt_beur))
-// 					$link = "../$ktovt_beur";
-// 			}
-	
+			// אם המשתמש מבקש פסוק, ויש ביאור על הפסוק - נעביר אותו ישר לביאור:
+			$canonical_name_of_psuq = canonical_name_of_psuq($phrase);
+			if ($canonical_name_of_psuq) {
+				$qod_of_beur = "ביאור:".$canonical_name_of_psuq;
+				$ktovt_beur = sql_evaluate("SELECT ktovt FROM prt_tnk1 WHERE qod=".quote_smart($qod_of_beur));
+				if ($ktovt_beur && preg_match("/^tnk1/",$ktovt_beur))
+					$link = "$linkroot/$ktovt_beur";
+			}
+
 			$recommended_results = "<li>
 				<a href='$link'>$title</a>
 				<script type='text/javascript'>window.location = '$link'</script>
@@ -100,9 +100,10 @@ if ($phrase) {
 			list($mxbr_results,$mxbr_count)=mxbr_results($phrase_quoted);  // in script/mxbr_lib.php
 			list($mftx_results,$mftx_count)=mftx_results($phrase_quoted);  // in script/mftx_lib.php
 		
-// 			list ($google_results, $google_count) = $GLOBALS['is_local']?
-// 				array("",0):
-// 				google_results($phrase_utf8);
+			list ($google_results, $google_count) = 
+// 				$GLOBALS['is_local']?
+// 					array("",0):
+					google_results($phrase);
 		}
 	}
 	
@@ -150,7 +151,7 @@ if ($phrase) {
 	
 	if ($mftx_results) $mftx_results = "
 		<div id='mftx'>
-		<h2>תוצאות חיפוש במפתח המאמרים</h2>
+		<h2>תוצאות חיפוש במפתח הנושאים</h2>
 		<ul>$mftx_results</ul>
 		</div><!--mftx-->
 		";
@@ -170,13 +171,47 @@ if ($phrase) {
 		<h2>לא מה שחיפשת?</h2>
 		<ul>
 		<li><a href='$linkroot/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
-		</ul>4
+		</ul>
 		</div><!--tips-->
 		";
 }
 	
 print $content;
 
+
+function google_results($phrase) {
+	global $GOOGLE_API_KEY, $GOOGLE_CSE_ID;
+	if (!$GOOGLE_API_KEY) return array(
+			array("לא ניתן לחפש בגוגל - המפתח לא מוגדר - פנו למנהל האתר"),
+			1);
+	if (!$GOOGLE_CSE_ID) return array(
+			array("לא ניתן לחפש בגוגל - המנוע לא מוגדר - פנו למנהל האתר"),
+			1);
+	$GoogleClient = new GoogleClient(/*$max_result_count=*/8); // use multiples of 8
+	$results = $GoogleClient->search_results(
+		"$phrase site:tora.us.fm", $GOOGLE_API_KEY, "iw", $GOOGLE_CSE_ID);
+	if (!$results) return array(
+			array("לא ניתן לחפש בגוגל - הקצאת החיפושים היומית הסתיימה - חכו למחר"),
+			1);
+	$google_results = ''; $google_count=0;
+	foreach ($results as &$result) {
+		$url = $result['unescapedUrl'];
+		if (preg_match("/psuqim_.*txt/",$url)) continue;
+
+		$title = $result['titleNoFormatting'];
+		if (preg_match("/^more/",$title)) {
+			$title = "עוד...";
+		} else {
+			++$google_count;
+		}
+		$content = $result['content'];
+		$anchor = "<a href='".htmlspecialchars($url,ENT_QUOTES)."'>$title</a>";
+		$cache_anchor = ($result['cacheUrl']? " (<a href='$result[cacheUrl]'>מטמון</a>)": "");
+
+		$google_results .= "<li>$anchor: $content$cache_anchor</li>\n";
+	}
+	return array($google_results, $google_count);
+}
 
 ?>
 </body></html>
