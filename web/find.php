@@ -13,8 +13,9 @@ $linkroot = "http://tora.us.fm";
 
 $SCRIPT=realpath(dirname(__FILE__)."/../script");
 require_once("$SCRIPT/psuqim.php");  // utilities related to verse ids
-require_once("$SCRIPT/findpsuq_lib.php");  // main search function
-require_once("$SCRIPT/mftx_lib.php");  // main index function
+require_once("$SCRIPT/findpsuq_lib.php");  // regexp search function
+require_once("$SCRIPT/mftx_lib.php");      // concept search function
+require_once("$SCRIPT/mxbr_lib.php");      // author search function
 
 $phrase = !empty($_GET['q'])? $_GET['q']: "";
 $single_verse = !empty($_GET['single_verse']);
@@ -92,11 +93,11 @@ if ($phrase) {
 			$recommended_count = 1;
 			$redirect = true;
 		} else {
-			list($mftx_recommended_results,$mftx_recommended_count)=mftx_recommended_results($phrase_quoted); // below
+			list($mftx_recommended_results,$mftx_recommended_count)=mftx_recommended_results($phrase_quoted); // in script/mftx_lib.php
 			$recommended_results .= $mftx_recommended_results;
 			$recommended_count += $mftx_recommended_count;
 
-			list($mxbr_results,$mxbr_count)=mxbr_results($phrase_quoted);  // below
+			list($mxbr_results,$mxbr_count)=mxbr_results($phrase_quoted);  // in script/mxbr_lib.php
 			list($mftx_results,$mftx_count)=mftx_results($phrase_quoted);  // in script/mftx_lib.php
 		
 // 			list ($google_results, $google_count) = $GLOBALS['is_local']?
@@ -175,48 +176,6 @@ if ($phrase) {
 }
 	
 print $content;
-
-
-function mftx_recommended_results($phrase_utf8_quoted) {
-	$rows_exact = get_exact_match_rows_without_sfr($phrase_utf8_quoted); // utf8
-	$mftx_recommended_results=''; $mftx_recommended_count=0;
-	if (sql_num_rows($rows_exact)>0) { // found exact match
-		while ($row=sql_fetch_row($rows_exact)) {
-			$mftx_recommended_results .= "<li>" . get_mftx_line($row) . "</li>\n";
-			$mftx_recommended_count++;
-		}
-	}
-	return array($mftx_recommended_results, $mftx_recommended_count);
-}
-
-
-function mxbr_results($phrase_utf8_quoted) {
-	global $linkroot;
-	sql_query_or_die("SET @sdr=0");
-	$rows = sql_query_or_die("
-			SELECT @sdr:=@sdr+1 AS sdr, tarik_hosfa, ktovt, kotrt FROM prt_tnk1
-			WHERE m=$phrase_utf8_quoted
-			UNION
-			SELECT @sdr:=@sdr+1 AS sdr, created_at, ktovt_bn, kotrt FROM board_tnk1
-			WHERE m=$phrase_utf8_quoted
-			AND sug is null
-			ORDER BY tarik_hosfa
-			");
-	$count = sql_num_rows($rows);
-	if ($count) {
-		$results = '';
-		while ($row=sql_fetch_assoc($rows)) {
-			$results = "<tr>
-			<td class='sdr'>$row[sdr]</td>
-			<td class='tarik_hosfa'>$row[tarik_hosfa]</td>
-			<td class='kotrt'><a href='$linkroot/$row[ktovt]'>$row[kotrt]</a></td>
-			</tr>" . $results;
-		}
-		return array($results,$count);
-	} else {
-		return array('',0);
-	}
-}
 
 
 ?>

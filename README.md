@@ -1,7 +1,17 @@
 Tanakh Navigation Kit
 =====================
 
-A set of tools for navigating in the TNK (Tora Neviim Ktuvim)
+A set of tables and tools for navigating in the TNK (Tora Neviim Ktuvim).
+
+# 1. Data tables
+All tables are in the data/ folder, in UTF-8 encoding, tab-separated values. 
+All tables are represented by 2 files: an SQL file that creates the table and a TXT file that contains the data.
+
+* data/psuqim.* - All 23202 verses in the Tanakh, in both undotted and dotted version.
+* data/sfrim.*  - Codes for the 39 books of the Tanakh.
+* data/prqim.* - Codes for chapter and verse numbers in the Tanakh.
+
+# 2. Code
 
 ## Requirements
 * Apache 2+
@@ -30,9 +40,9 @@ D. Verify that there are no errors in the output.
 
 Go to http://localhost/tnk/findpsuq.php
 
-## Code
+## Scripts
 * **script/findpsuq_lib.php** - functions for searching regular expressions in the Tanakh verses. 
 * **script/niqud.php** - functions for adding dots ("niqud") to Tanakh verses.
 
-## License
-LGPL
+# 3. License
+Both data and code is LGPL.

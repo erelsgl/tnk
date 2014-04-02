@@ -76,6 +76,20 @@ function mftx_results($phrase_utf8_quoted) {
 		return array($mftx_results,$mftx_count);
 }
 
+
+function mftx_recommended_results($phrase_utf8_quoted) {
+	$rows_exact = get_exact_match_rows_without_sfr($phrase_utf8_quoted); // utf8
+	$mftx_recommended_results=''; $mftx_recommended_count=0;
+	if (sql_num_rows($rows_exact)>0) { // found exact match
+		while ($row=sql_fetch_row($rows_exact)) {
+			$mftx_recommended_results .= "<li>" . get_mftx_line($row) . "</li>\n";
+			$mftx_recommended_count++;
+		}
+	}
+	return array($mftx_recommended_results, $mftx_recommended_count);
+}
+
+
 // function fix_charset($phrase) {
 // require_once("../_script/mysql_iconv.php");
 // 	$phrase_quoted = quote_smart($phrase);
