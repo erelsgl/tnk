@@ -38,22 +38,40 @@ class GoogleClient {
 		if ($language_of_results)
 			$url_prefix .= "&lr=lang_$language_of_results";
 
-		if (is_string($queries))
-			$queries = array($queries);
+		if (is_string($queries)) 
+			return $this->search_results_single_query($url_prefix, $queries);
 
 		$results = array();
 		$urls_found = array();  // to prevent duplicates
-		foreach ($queries as $query) {
+		foreach ($queries as $query) 
+			$results = array_merge($results, $this->search_results_single_query($url_prefix, $query));
+		return $results;
+	}
+	
+	function search_results_single_query($url_prefix, $query) {
+			$results = array();
+			$urls_found = array();
 			$query_encoded=urlencode($query);
 			$url = "$url_prefix&q=$query_encoded"; 
-	
+
 			for ($start=0; $start<$this->max_result_count; $start+=8) {
 				$results_object = $this->search_results_object("$url&start=$start");
 
 				if (!isset($results_object["responseData"],$results_object["responseData"]["results"])) {
-					user_error("no results!", E_USER_WARNING);
-					print_r($results_object);
-					break;
+					if (isset($results_object["responseDetails"]) && preg_match("/Quota Exceeded/i",$results_object["responseDetails"])) {
+						$results[] = array(
+							"url" => $url,
+							"unescapedUrl" => $url,
+							"cacheUrl" => "",
+							"title" => "לחצו כאן כדי לחפש בעצמכם",
+							"titleNoFormatting" => "לחצו כאן כדי לחפש בעצמכם",
+							"content" => "הקצבת החיפושים היומית הסתיימה"
+							);
+					} else {
+						user_error("no results!", E_USER_WARNING);
+						print_r($results_object);
+						break;
+					}
 				}
 				$results_array = $results_object["responseData"]["results"];
 				$more_results = count($results_array)>=8;
@@ -78,9 +96,8 @@ class GoogleClient {
 				"titleNoFormatting" => "more $query",
 				"content" => ""
 				);
-		}
-		return $results;
-	}
+			return $results;
+	}		
 
 	function search_results_object($url) {
 
