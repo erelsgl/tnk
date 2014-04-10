@@ -220,5 +220,14 @@ function to_sofiot($string) {
 }
 */
 
+/**
+ * http://stackoverflow.com/questions/434250/how-to-reverse-a-unicode-string
+ * http://stackoverflow.com/a/3749543/827927
+ */
+function mb_strrev($str) {
+	preg_match_all('/./us', $str, $ar);
+	return implode(array_reverse($ar[0]));
+}
+
 
 ?>

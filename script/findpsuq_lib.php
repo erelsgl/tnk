@@ -49,7 +49,7 @@ function regexp_error ($phrase) {
  * @param $single_verse boolean true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
  * @param $add_niqud boolean true to add dots (niqud) to the emphasized verses.
  */ 
-function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0) {
+function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0,$add_sikum=0) {
 	global $linkroot, $newline;
 	$result = '';
 	$result_wikisource = '';
@@ -64,7 +64,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 		$ot_psuq = $verse['verse_letter'];
 		$verse_text = $verse['verse_text'];
 		$ktovt_trgum = $verse['ktovt_trgum'];
-		$ktovt_sikum = $verse['ktovt_sikum'];
+		$ktovt_sikum = ($add_sikum? $verse['ktovt_sikum']: null);
 
 		$verse_text_bli_niqud_utf8 =
 			preg_replace("/יהוה/", "ה'",
@@ -146,7 +146,7 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
 		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$linkroot/")."$ktovt_trgum'>פירוט</a>":
 		"");
 
-	$sikum_anchor = (isset($_GET['sikum'])?
+	$sikum_anchor = ($ktovt_sikum?
 		"<a href='$linkroot/tnk1/sikum.php?$ktovt_sikum&utf8=1&find=1'>סיכום</a>": 
 		"");
 
@@ -174,10 +174,12 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * @param $add_niqud [boolean] - true to display the verses with dots ("niqud").
  * @param $find_niqud [boolean] true to find the expression in the dotted (mnuqad) version of the verses.
  */ 
-function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
-	//If the phrase contains niqud, look in the table of verses with niqud.
-	//	-- This currently does not work, because of encoding. The input encoding is hebrew, but the database is utf8 :(
-	//$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
+function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
+	//If the phrase contains niqud, look in the column of dotted verse text:
+	$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
+	if ($find_niqud)
+		$add_niqud = false;
+
 	$newline = "\n";
 	$fullbody = '';
 	$count = 0;
@@ -213,13 +215,13 @@ function find_phrase($phrase, $single_verse, $add_niqud, $find_niqud) {
 			$subphrases = explode("|",$phrase);
 			foreach ($subphrases as $subphrase) {
 				$verses = sql_query_or_die($query);
-				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud);
+				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud, $add_sikum);
 				$fullbody .= "<h2>$subphrase</h2>\n";
 				$fullbody .= $results;
 			}
 		} else {
 			$verses = sql_query_or_die($query);
-			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud);
+			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud, $add_sikum);
 			$fullbody .= $results;
 		}
 		if ($fullbody)

@@ -18,9 +18,8 @@ $phrase = !empty($_GET['q'])? $_GET['q']: "";
 $single_verse = !empty($_GET['single_verse']);
 $phrase_quoted = quote_all($phrase);
 $phrase_html = htmlspecialchars($phrase,ENT_QUOTES);
-$niqud_level = (!empty($_GET['niqud_level'])? $_GET['niqud_level']: 0);
-$add_niqud = $niqud_level==1;
-$find_niqud = $niqud_level==2;
+$add_sikum = (!empty($_GET['add_sikum']));
+$add_niqud = (!empty($_GET['add_niqud']));
 $reverse = !empty($_GET['reverse']);
 
 $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
@@ -36,12 +35,8 @@ print "
 			היעד:
 			<input id='find' name='q' value='$phrase_html' />
 			".($single_verse? "<input type='checkbox' name='single_verse' checked='checked' />רק פסוק אחד ": "")."<br/>
-			<select name='niqud_level'>
-					<option value='0' ".($niqud_level==0? " selected='selected'": "").">ללא ניקוד</option>
-					<option value='1' ".($niqud_level==1? " selected='selected'": "").">תצוגה עם ניקוד</option>
-					<option value='2' ".($niqud_level==2? " selected='selected'": "").">חיפוש עם ניקוד</option>
-			</select>
-			<input type='checkbox' name='sikum' ".(!empty($_GET['sikum'])? " checked='checked'": "")." />עם&nbsp;סיכום 
+			<input type='checkbox' name='add_niqud' ".($add_niqud? " checked='checked'": "")." />עם&nbsp;ניקוד 
+			<input type='checkbox' name='add_sikum' ".($add_sikum? " checked='checked'": "")." />עם&nbsp;סיכום 
 			<input type='checkbox' name='reverse' />לאחור
 			<input type='submit' value='חפש!' />
 		</form>
@@ -53,9 +48,9 @@ print "
 if ($phrase) {
 	$fixed_phrase = fix_regexp($phrase);
 	if ($reverse)
-		$fixed_phrase = strrev($fixed_phrase);
+		$fixed_phrase = mb_strrev($fixed_phrase);
 	
-	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $find_niqud);
+	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum);
 
 	print "
 <div id='results'>
