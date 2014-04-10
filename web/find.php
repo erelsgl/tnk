@@ -54,11 +54,12 @@ if ($phrase) {
 	$recommended_count = $mftx_count = $findpsuq_count = $google_count = $mxbr_results_count = 0;
 	$redirect = false;
 	
-	$fixed_phrase = fix_regexp($phrase);
 	if ($reverse) {
-		$fixed_phrase = mb_strrev($fixed_phrase);
-		$fixed_phrase = to_txiliot($fixed_phrase);
+		$phrase = mb_strrev($phrase);
+		$phrase = to_txiliot($phrase);
 	}
+	
+	$fixed_phrase = fix_regexp($phrase);
 
 	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum);
 
