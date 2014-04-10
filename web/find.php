@@ -55,8 +55,10 @@ if ($phrase) {
 	$redirect = false;
 	
 	$fixed_phrase = fix_regexp($phrase);
-	if ($reverse)
+	if ($reverse) {
 		$fixed_phrase = mb_strrev($fixed_phrase);
+		$fixed_phrase = to_txiliot($fixed_phrase);
+	}
 
 	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum);
 

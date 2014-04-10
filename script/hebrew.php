@@ -207,18 +207,17 @@ function compare_hebrew_numbers($a, $b) {
 	return compare_numbers(hebrew2number($a),hebrew2number($b));
 }
 
-/*
+
+$txiliot = array("כ","מ","נ","פ","צ");
+$sofiot  = array("ך","ם","ן","ף","ץ");
+
 function to_txiliot($string) {
-   $string =~ tr!ךםןףץ!כמנפצ!;
+	global $txiliot, $sofiot;
+	for ($i=0; $i<count($txiliot); ++$i)
+		$string = str_replace($sofiot[$i], $txiliot[$i], $string);
    return $string;
 }
 
-function to_sofiot($string) {
-   $string = $_[0];
-   $string =~ tr!כמנפצ!ךםןףץ!;
-   return $string;
-}
-*/
 
 /**
  * http://stackoverflow.com/questions/434250/how-to-reverse-a-unicode-string
