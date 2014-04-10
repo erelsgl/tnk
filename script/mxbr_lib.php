@@ -34,4 +34,25 @@ function mxbr_results($phrase_utf8_quoted) {
 	}
 }
 
+function mxbr_results_online($phrase_utf8_quoted, $link_for_updated_list, $target_encoding) {
+	global $linkroot;
+	$timeout_seconds = 1;
+	$url = "$linkroot/tnk1/mxbr_results.php?q=".urlencode($phrase_utf8_quoted);
+	$content = @file_get_contents($url,null, stream_context_create(array('http'=>array('timeout' => $timeout_seconds))));
+	if ($content) {
+		$content = iconv("Windows-1255", $target_encoding, $content);
+		return explode("###", $content);
+	} else {
+		list($results,$count) = mxbr_results($phrase_utf8_quoted);
+		if ($results) 
+			$results = "<tr>
+				<td class='sdr'>0</td>
+				<td class='tarik_hosfa'>-</td>
+				<td class='kotrt'>$link_for_updated_list</td>
+				</tr>
+				".$results;
+		return array($results,$count);
+	}
+}
+
 ?>

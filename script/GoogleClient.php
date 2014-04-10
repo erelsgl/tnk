@@ -59,6 +59,8 @@ class GoogleClient {
 
 				if (!isset($results_object["responseData"],$results_object["responseData"]["results"])) {
 					if (isset($results_object["responseDetails"]) && preg_match("/Quota Exceeded/i",$results_object["responseDetails"])) {
+						$url = preg_replace("/key=.*?[&]/i","",$url);
+						$url = preg_replace("/^.*?[?]/i","http://google.com/search?",$url);
 						$results[] = array(
 							"url" => $url,
 							"unescapedUrl" => $url,
@@ -67,6 +69,7 @@ class GoogleClient {
 							"titleNoFormatting" => "לחצו כאן כדי לחפש בעצמכם",
 							"content" => "הקצבת החיפושים היומית הסתיימה"
 							);
+						return $results;
 					} else {
 						user_error("no results!", E_USER_WARNING);
 						print_r($results_object);
