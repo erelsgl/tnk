@@ -165,7 +165,8 @@ if ($phrase) {
 		<li><a href='$linkroot/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
 		</ul>
 		</div><!--tips-->
-		<a href='?q=$phrase&add_niqud=$add_niqud&add_sikum=$add_sikum&reverse=$reverse'>קישור לחיפוש זה</a>
+		קישור לחיפוש זה: 
+		<a href='?q=$phrase&add_niqud=$add_niqud&add_sikum=$add_sikum&reverse=$reverse'>$phrase</a>
 		";
 }
 	
