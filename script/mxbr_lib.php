@@ -16,7 +16,7 @@ function mxbr_results($phrase_utf8_quoted) {
 			SELECT @sdr:=@sdr+1 AS sdr, created_at, ktovt_bn, kotrt FROM board_tnk1
 			WHERE m=$phrase_utf8_quoted
 			AND sug is null
-			ORDER BY tarik_hosfa
+			ORDER BY 1 ASC
 			");
 	$count = sql_num_rows($rows);
 	if ($count) {
@@ -41,7 +41,12 @@ function mxbr_results_online($phrase_utf8_quoted, $link_for_updated_list, $targe
 	$content = @file_get_contents($url,null, stream_context_create(array('http'=>array('timeout' => $timeout_seconds))));
 	if ($content) {
 		$content = iconv("Windows-1255", $target_encoding, $content);
-		return explode("###", $content);
+		$array2 = explode("###", $content);
+		if (!is_array($array2) || count($array2)!=2) {
+			user_error("expected results and count but found "+print_r($array2,true),E_USER_WARNING);
+			return array("",0);	
+		}
+		return $array2;
 	} else {
 		list($results,$count) = mxbr_results($phrase_utf8_quoted);
 		if ($results) 

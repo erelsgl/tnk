@@ -98,7 +98,7 @@ if ($phrase) {
 				mxbr_results($phrase_quoted):  // in script/mxbr_lib.php
 				mxbr_results_online($phrase_quoted,
 					"<a href='$linkroot/tnk1/find.php?q=".urlencode(iconv("UTF-8", "Windows-1255", $phrase))."'>רשימה מעודכנת</a>", "UTF-8");
-				
+
 			list ($google_results, $google_count) = 
 // 				$GLOBALS['is_local']?
 // 					array("",0):
@@ -182,12 +182,14 @@ print $content;
 
 function google_results($phrase) {
 	global $GOOGLE_API_KEY, $GOOGLE_CSE_ID;
-	if (!$GOOGLE_API_KEY) return array(
+	if (!isset($GOOGLE_API_KEY)) return array(
 			"לא ניתן לחפש בגוגל - המפתח לא מוגדר - פנו למנהל האתר",
 			1);
-	if (!$GOOGLE_CSE_ID) return array(
+	else if (!$GOOGLE_API_KEY) return array("", 0);
+	if (!isset($GOOGLE_CSE_ID)) return array(
 			"לא ניתן לחפש בגוגל - המנוע לא מוגדר - פנו למנהל האתר",
 			1);
+	else if (!$GOOGLE_CSE_ID) return array("", 0);
 	$GoogleClient = new GoogleClient(/*$max_result_count=*/8); // use multiples of 8
 	$results = $GoogleClient->search_results(
 		"$phrase site:tora.us.fm", $GOOGLE_API_KEY, "iw", $GOOGLE_CSE_ID);
