@@ -9,6 +9,42 @@
 $otiot_txiliot = "אבגדהוזחטיכלמנסעפצקרשת";
 $otiot_ivriot = "אבגדהוזחטיךכלםמןנסעףפץצקרשת";
 
+$letters1 = array('א','ב','ג','ד','ה','ו','ז','ח','ט','י');
+$letters2 = array(
+		array('י','כ','ל','מ','נ','ס','ע','פ','צ','ק'),
+		array('י','ך','ל','ם','ן','ס','ע','ף','ץ','ק'));
+$letters3 = array('ק','ר','ש','ת');
+
+$hebrew2number = array(
+		'א' => 1,
+		'ב' => 2,
+		'ג' => 3,
+		'ד' => 4,
+		'ה' => 5,
+		'ו' => 6,
+		'ז' => 7,
+		'ח' => 8,
+		'ט' => 9,
+		'י' => 10,
+		'ך' => 20,
+		'כ' => 20,
+		'ל' => 30,
+		'ם' => 40,
+		'מ' => 40,
+		'ן' => 50,
+		'נ' => 50,
+		'ס' => 60,
+		'ע' => 70,
+		'ף' => 80,
+		'פ' => 80,
+		'ץ' => 90,
+		'צ' => 90,
+		'ק' => 100,
+		'ר' => 200,
+		'ש' => 300,
+		'ת' => 400
+);
+
 ### regular expressions for Hebrew numbers ###
 $hebchar1 = "[א-ט]";
 $hebchar2 = "[י-צ]";
@@ -23,25 +59,20 @@ $hebnum = "(?:$hebnum12|$hebnum3)";
 
 
 $values = array (1,2,3,4,5,6,7,8,9,10,20,20,30,40,40,50,50,60,70,80,80,90,90,100,200,300,400);
-$ALEF = ord("א");
+
 # return the value of its argument in "gimatriya"
 function hebrew2number($hebrew) {
-	global $values, $ALEF;
-	$ascii = unpack("C*", $hebrew);
+	global $hebrew2number;
 	$sum = 0;
-	foreach ($ascii as $val) {
-		$val_relative = $val-$ALEF;
-		if ($val_relative>=0 && $val_relative<count($values))
-			$sum += $values[$val-$ALEF];
+	$otiot = preg_split('//u',$hebrew, -1, PREG_SPLIT_NO_EMPTY);
+	for ($i=0; $i<count($otiot); ++$i) {
+		$val = $hebrew2number[$otiot[$i]];
+		if ($val)  
+			$sum += $val;
 	}
 	return $sum;
 }
 
-$letters1 = array('א','ב','ג','ד','ה','ו','ז','ח','ט','י');
-$letters2 = array(
-	array('י','כ','ל','מ','נ','ס','ע','פ','צ','ק'),
-	array('י','ך','ל','ם','ן','ס','ע','ף','ץ','ק'));
-$letters3 = array('ק','ר','ש','ת');
 function number2hebrew($num, $sofiot=false) {
 	global $letters1, $letters2, $letters3;
 	$heb = "";

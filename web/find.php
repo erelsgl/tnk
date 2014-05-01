@@ -20,6 +20,8 @@ require_once("mxbr_lib.php");      // author search function
 require_once("GoogleClient.php");
 
 $phrase = !empty($_GET['q'])? $_GET['q']: "";
+$phrase_html = htmlspecialchars($phrase,ENT_QUOTES);
+
 $reverse = !empty($_GET['reverse']);
 $single_verse = !empty($_GET['single_verse']);
 $add_sikum = !empty($_GET['add_sikum']);
@@ -57,7 +59,6 @@ if ($phrase) {
 		$phrase = to_txiliot($phrase);
 	}
 	$phrase_quoted = quote_all($phrase);
-	$phrase_html = htmlspecialchars($phrase,ENT_QUOTES);
 	$fixed_phrase = fix_regexp($phrase);
 
 	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum);
