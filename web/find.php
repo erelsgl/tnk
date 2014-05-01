@@ -183,16 +183,16 @@ print $content;
 function google_results($phrase) {
 	global $GOOGLE_API_KEY, $GOOGLE_CSE_ID;
 	if (!$GOOGLE_API_KEY) return array(
-			array("לא ניתן לחפש בגוגל - המפתח לא מוגדר - פנו למנהל האתר"),
+			"לא ניתן לחפש בגוגל - המפתח לא מוגדר - פנו למנהל האתר",
 			1);
 	if (!$GOOGLE_CSE_ID) return array(
-			array("לא ניתן לחפש בגוגל - המנוע לא מוגדר - פנו למנהל האתר"),
+			"לא ניתן לחפש בגוגל - המנוע לא מוגדר - פנו למנהל האתר",
 			1);
 	$GoogleClient = new GoogleClient(/*$max_result_count=*/8); // use multiples of 8
 	$results = $GoogleClient->search_results(
 		"$phrase site:tora.us.fm", $GOOGLE_API_KEY, "iw", $GOOGLE_CSE_ID);
 	if (!$results) return array(
-			array("לא ניתן לחפש בגוגל - הקצאת החיפושים היומית הסתיימה - חכו למחר"),
+			"לא ניתן לחפש בגוגל - הקצאת החיפושים היומית הסתיימה - חכו למחר",
 			1);
 	$google_results = ''; $google_count=0;
 	foreach ($results as &$result) {
