@@ -5,7 +5,6 @@ error_reporting(E_ALL);
 set_include_path(realpath(dirname(__FILE__) . "/../script") . PATH_SEPARATOR . get_include_path());
 require_once('../admin/db_connect.php');
 require_once('coalesce.php');
-// require_once('string.php');
 require_once('forms.php');
 require_once('sikum_library.php');
 ?>
@@ -81,14 +80,41 @@ if (!$qod_sfr || !$mspr_prq || !$mspr_psuq) {
 	die;
 }
 
-print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
+if (!empty($GLOBALS['is_local'])) {
+	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
+			/*$include_mikraotgdolot=*/TRUE,
+			/*$include_navigation=*/FALSE,
+			/*$include_wikisource=*/FALSE,
+			/*$include_google=*/FALSE,
+			/*$include_etnachta=*/FALSE
+			);
+} else if (isset($_GET['nav'])) {
+	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
 		/*$include_mikraotgdolot=*/TRUE,
-		/*$include_navigation=*/FALSE,
-		/*$include_wikisource=*/FALSE,
-		/*$include_google=*/FALSE,
-		/*$include_etnachta=*/FALSE
+		/*$include_navigation=*/TRUE,
+		/*$include_wikisource=*/TRUE,
+		/*$include_google=*/TRUE,
+		/*$include_etnachta=*/TRUE
 		);
+} else if (isset($_GET['find'])) {
+	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
+		/*$include_mikraotgdolot=*/TRUE,
+		/*$include_navigation=*/TRUE,
+		/*$include_wikisource=*/TRUE,
+		/*$include_google=*/FALSE,
+		/*$include_etnachta=*/TRUE
+		);
+} else {
+	print "<p>".sikum_explanation()."</p>";
 
+	print "<textarea cols='80' rows='20' dir='rtl'>\n".sikum($qod_sfr, $mspr_prq, $mspr_psuq,
+		/*$include_mikraotgdolot=*/TRUE,
+		/*$include_navigation=*/false,
+		/*$include_wikisource=*/TRUE,
+		/*$include_google=*/TRUE,
+		/*$include_etnachta=*/TRUE
+		)."\n</textarea>\n";
+}
 ?>
 </body>
 </html>
