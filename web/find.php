@@ -9,7 +9,9 @@ error_reporting(E_ALL);
  * @date 2009-2014
  */
 
-$linkroot = "http://tora.us.fm";
+$linkroot = !empty($GLOBALS['is_local'])?
+	"http://tora.us.fm":
+	"http://localhost";
 
 set_include_path(realpath(dirname(__FILE__) . "/../script") . PATH_SEPARATOR . get_include_path());
 require_once("psuqim.php");  // utilities related to verse ids
@@ -71,7 +73,7 @@ if ($phrase) {
 		list($link,$title) = link_to_sfr_prq_o_psuq($phrase); // in script/psuqim.php
 		if ($link && $title && strpos($phrase," ")) {
 			$link = "$linkroot$link";
-	
+
 			// אם המשתמש מבקש פסוק, ויש ביאור על הפסוק - נעביר אותו ישר לביאור:
 			$canonical_name_of_psuq = canonical_name_of_psuq($phrase);
 			if ($canonical_name_of_psuq) {
@@ -100,8 +102,8 @@ if ($phrase) {
 					"<a href='$linkroot/tnk1/find.php?q=".urlencode(iconv("UTF-8", "Windows-1255", $phrase))."'>רשימה מעודכנת</a>", "UTF-8");
 
 			list ($google_results, $google_count) = 
-// 				$GLOBALS['is_local']?
-// 					array("",0):
+ 				!empty($GLOBALS['is_local'])?
+ 					array("",0):
 					google_results($phrase);
 		}
 	}
@@ -147,7 +149,7 @@ if ($phrase) {
 		<ol>$google_results</ol>
 		</div><!--google-->
 		";
-	
+
 	if ($mftx_results) $mftx_results = "
 		<div id='mftx'>
 		<h2>תוצאות חיפוש במפתח הנושאים</h2>
