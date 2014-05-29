@@ -47,7 +47,7 @@ class MediawikiClient {
 					$title = ":$title";
 				$url = $this->api_url."?action=parse&text={{".urlencode($title)."}}&redirects=1&format=xml";
 			}
-			return implode("", getValues(getNodeList($url, "//text")));
+			return implode("", getValues($this->getNodeList($url, "//text")));
 		}
 
 		/**
@@ -56,7 +56,7 @@ class MediawikiClient {
 		*/
 		function parse($source) {
 			$url = $this->api_url."?action=parse&text=".urlencode($source)."&redirects=1&format=xml";
-			return implode("", getValues(getNodeList($url, null, "text")));
+			return implode("", getValues($this->getNodeList($url, null, "text")));
 		}
 
 		/**
@@ -66,7 +66,7 @@ class MediawikiClient {
 		function page_source($title) {
 				$title_encoded = urlencode($title);
 				$url = $this->api_url. "?action=query&prop=revisions&rvprop=content&titles=$title_encoded&redirects=1&format=xml";
-				return implode("", getValues(getNodeList($url, null, "rev")));
+				return implode("", getValues($this->getNodeList($url, null, "rev")));
 		}
 
 		/**
@@ -173,7 +173,7 @@ class MediawikiClient {
 		*/
 		function titles_alphabetic($namespace, $start, $limit) {
 			$url = "?action=query&list=allpages&apnamespace=$namespace&apfrom=$start&aplimit=$limit&format=xml";
-			return getTitles(getNodeList($this->api_url.$url, null, "p" /*was:  "/api/query/allpages/p"*/));
+			return getTitles($this->getNodeList($this->api_url.$url, null, "p" /*was:  "/api/query/allpages/p"*/));
 		}
 
 		/**
@@ -188,7 +188,7 @@ class MediawikiClient {
 			//$url = "?action=query&list=alllinks&alnamespace=$namespace&alprefix=$prefix&allimit=$limit&format=xml";
 			$prefix_encoded = urlencode($prefix);
 			$url = "?action=query&list=allpages&apnamespace=$namespace&apprefix=$prefix_encoded&aplimit=$limit&format=xml";
-			return getTitles(getNodeList($this->api_url.$url, null, "p" /*was:  "/api/query/allpages/p"*/));
+			return getTitles($this->getNodeList($this->api_url.$url, null, "p" /*was:  "/api/query/allpages/p"*/));
 		}
 
 		/**
@@ -199,7 +199,7 @@ class MediawikiClient {
 		*/
 		function titles_backlinks($title_linked_to, $limit, $namespace=NAMESPACES_CONTENT) {
 			$url = "?action=query&list=backlinks&blnamespace=$namespace&bltitle=".urlencode($title_linked_to)."&bllimit=$limit&format=xml";
-			return getTitles(getNodeList($this->api_url.$url, null, "bl"));  /* was: /api/query/backlinks/bl or //bl */
+			return getTitles($this->getNodeList($this->api_url.$url, null, "bl"));  /* was: /api/query/backlinks/bl or //bl */
 		}
 
 		/**
@@ -210,8 +210,27 @@ class MediawikiClient {
 		* @return array of titles of pages in the given category.
 		*/
 		function titles_categorymembers($category, $limit, $namespace=null) {
-			$url = "?action=query&list=categorymembers".($namespace===null? "&cmnamespace=$namespace": "")."&cmtitle=".urlencode("category:$category")."&cmlimit=$limit&format=xml";
-			return getTitles(getNodeList($this->api_url.$url, null, "cm"));
+			$this->continue_key = null; // initialize
+			$base_url = $this->api_url."?action=query&list=categorymembers".($namespace===null? "&cmnamespace=$namespace": "")."&cmtitle=".urlencode("category:$category")."&format=xml";
+			$tagname = "cm";
+			$xpath_query = null;
+			$MAX_LIMIT = 500; // limit set by WikiMedia
+			if ($limit<=$MAX_LIMIT) {
+				$url = "$base_url&cmlimit=$limit";
+				$nodes = $this->getNodeList($url, $xpath_query, $tagname);
+				return getTitles($nodes);
+			} else {
+				$titles = array();
+				$url = "$base_url&cmlimit=$MAX_LIMIT";
+				for (;;) {
+					$nodes = $this->getNodeList($url, $xpath_query, $tagname);
+					$titles = array_merge($titles, getTitles($nodes));
+					if (!$this->continue_key)
+						break;
+					$url = "$base_url&cmlimit=$MAX_LIMIT&cmcontinue=".$this->continue_key;
+				}
+				return $titles;
+			}
 		}
 
 
@@ -265,59 +284,73 @@ class MediawikiClient {
 						return;
 				}
 		}
-}
 
-function getNodeList($url, $xpath_query, $tag_name=null) {
-	if (!is_string($url)) {
-		print("<pre dir='ltr'>");
-		var_dump($url);
-		print("</pre>");
-		//print_r(debug_backtrace());
-		user_error("getNodeList expects a string!", E_USER_ERROR);
-	}
 
-	$DEBUG=false;
-	if ($DEBUG) print("<p dir='ltr'>getNodeList($url, $xpath_query, $tag_name)</p>");
-	$contents = get_url_with_agent($url);
-	if ($DEBUG) print("<p class='contents' dir='rtl'>$contents</p>\n");
-	if (!$contents) {
-		user_error("<p dir='ltr'>empty reply from $url</p>");
-		return array();
-	}
-	if (strpos($contents, "<title>Wikimedia Error</title>")) {
-		print("<p dir='ltr'>Error getting url $url :</p>");
-		print("<p class='contents' dir='rtl'>$contents</p>\n");
-		user_error("<p dir='ltr'>Wikimedia error in $url</p>");
-		return array();
-	}
-	return getNodeListFromXmlContents($url, $contents, $xpath_query, $tag_name);
-}
+		function getNodeList($url, $xpath_query, $tag_name=null) {
+			if (!is_string($url)) {
+				print("<pre dir='ltr'>");
+				var_dump($url);
+				print("</pre>");
+				//print_r(debug_backtrace());
+				user_error("$this->getNodeList expects a string!", E_USER_ERROR);
+			}
 
-function getNodeListFromXmlContents($url, $contents, $xpath_query, $tag_name=null) {
-	$xml = @DOMDocument::loadXML($contents);
-	if (!$xml) {
-		user_error("empty xml from $url");
-		return array();
-	}
-	if ($xpath_query) {
-		$xpath = new DOMXPath($xml);
-		$nodeList = $xpath->query($xpath_query);
-		if (!$nodeList->length) {
-			user_error("<p dir='ltr'>no nodes: url=$url query=$xpath_query</p>");
-			return array();
+			$DEBUG=false;
+			if ($DEBUG) print("<p dir='ltr'>$this->getNodeList($url, $xpath_query, $tag_name)</p>");
+			$contents = get_url_with_agent($url);
+			if ($DEBUG) print("<p class='contents' dir='rtl'>$contents</p>\n");
+			if (!$contents) {
+				user_error("<p dir='ltr'>empty reply from $url</p>");
+				return array();
+			}
+			if (strpos($contents, "<title>Wikimedia Error</title>")) {
+				print("<p dir='ltr'>Error getting url $url :</p>");
+				print("<p class='contents' dir='rtl'>$contents</p>\n");
+				user_error("<p dir='ltr'>Wikimedia error in $url</p>");
+				return array();
+			}
+			return $this->getNodeListFromXmlContents($url, $contents, $xpath_query, $tag_name);
 		}
-	} else {
-		$nodeList = $xml->getElementsByTagName($tag_name);
-		if (!$nodeList->length) {
-			user_error("<p dir='ltr'>no nodes: url=$url tag=$tag_name</p>");
-			return array();
+
+		function getNodeListFromXmlContents($url, $contents, $xpath_query, $tag_name=null) {
+			$xml = @DOMDocument::loadXML($contents);
+			if (!$xml) {
+				user_error("empty xml from $url");
+				return array();
+			}
+
+
+			$xpath = new DOMXPath($xml);
+
+			// to continue reading a long category:
+			$continue_xpath_query = "/api/query-continue/*";
+			$continue_nodeList = $xpath->query($continue_xpath_query);
+			if ($continue_nodeList->length) {
+				$this->continue_key = $continue_nodeList->item(0)->getAttribute("cmcontinue");
+			} else {
+				$this->continue_key = null;
+			}
+
+			if ($xpath_query) {
+				$nodeList = $xpath->query($xpath_query);
+				if (!$nodeList->length) {
+					user_error("<p dir='ltr'>no nodes: url=$url query=$xpath_query</p>");
+					return array();
+				}
+			} else {
+				$nodeList = $xml->getElementsByTagName($tag_name);
+				if (!$nodeList->length) {
+					user_error("<p dir='ltr'>no nodes: url=$url tag=$tag_name</p>");
+					return array();
+				}
+			}
+			return $nodeList;
 		}
-	}
-	return $nodeList;
+
 }
 
 /**
- * @param $nodeList output of getNodeListFromXmlContents
+ * @param $nodeList output of $this->getNodeListFromXmlContents
  * @param $xpath_query string of an xpath in the XML document.
  * @return all values of titles from that xpath in that document (??)
  */

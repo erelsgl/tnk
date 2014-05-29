@@ -9,9 +9,6 @@ error_reporting(E_ALL);
  * @date 2009-2014
  */
 
-$linkroot = !empty($GLOBALS['is_local'])?
-	"http://tora.us.fm":
-	"http://localhost";
 
 set_include_path(realpath(dirname(__FILE__) . "/../script") . PATH_SEPARATOR . get_include_path());
 require_once("psuqim.php");  // utilities related to verse ids
@@ -32,6 +29,10 @@ $add_niqud = !empty($_GET['add_niqud']);
 $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 
 require("find_header.php");
+
+$is_local = !empty($GLOBALS['is_local']);
+$linkroot = ($is_local? "http://localhost": "http://tora.us.fm");
+
 print "
 <div id='top'>
 	<div class='center'>
