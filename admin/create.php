@@ -38,6 +38,7 @@ function show_create_page() {
 	set_coalesce($GLOBALS['db_pass'], coalesce($GLOBALS['db_pass'],''));
 	set_coalesce($GLOBALS['GOOGLE_API_KEY'], coalesce($GLOBALS['GOOGLE_API_KEY'],''));
 	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
+	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
 	
 	print "
 ## Credentials
@@ -66,6 +67,8 @@ function show_create_page() {
 	$_POST['GOOGLE_API_KEY'] = $GOOGLE_API_KEY? $GOOGLE_API_KEY: $GLOBALS['GOOGLE_API_KEY'];
 	print "Google CSE ID [$GLOBALS[GOOGLE_CSE_ID]]: "; $GOOGLE_CSE_ID = trim(fgets(STDIN));
 	$_POST['GOOGLE_CSE_ID'] = $GOOGLE_CSE_ID? $GOOGLE_CSE_ID: $GLOBALS['GOOGLE_CSE_ID'];
+	print "Local? [$GLOBALS[is_local]]: "; $is_local = trim(fgets(STDIN));
+	$_POST['is_local'] = $is_local? $is_local: $GLOBALS['is_local'];
 }
 
 function update_create_page() {
@@ -146,6 +149,7 @@ function create_db_connect_params() {
 \$GLOBALS['BACKUP_FILEROOT'] = str_replace('admin','data',dirname(__FILE__));
 \$GLOBALS['GOOGLE_API_KEY'] = \$GOOGLE_API_KEY = '$_POST[GOOGLE_API_KEY]';
 \$GLOBALS['GOOGLE_CSE_ID' ] = \$GOOGLE_CSE_ID = '$_POST[GOOGLE_CSE_ID]';
+\$GLOBALS['is_local' ] = \$is_local = '$_POST[is_local]';
 ?".">")  /* put dirname inside the ""! */
 or die ("Can't create db_connect_params");
 }

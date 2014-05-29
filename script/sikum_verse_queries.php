@@ -1,4 +1,4 @@
-<?
+<?php
 
 $GLOBALS['GOOGLE_CSE_LINK']='http://www.google.com/cse?cx=010178520503316434778%3Aufdjhgdvtao';
 
