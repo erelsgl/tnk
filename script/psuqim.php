@@ -206,7 +206,7 @@ function psuq_im_qijurim_mmilim ($mxroztmilim, $mxroztqjrimmmilim) {
 	$mxroztmilim = str_replace("  "," ",$mxroztmilim);
 	
 	$verseTextEnd = "";
-	if (preg_match("/^(.*)(<..>)$/",$mxroztmilim, $matches)) {
+	if (preg_match("/^(.*)(<..>)$/u",$mxroztmilim, $matches)) {
 		$mxroztmilim = $matches[1];
 		$verseTextEnd = $matches[2];
 	}
@@ -231,7 +231,7 @@ function psuq_im_qijurim_mmilim ($mxroztmilim, $mxroztqjrimmmilim) {
 		$qijur = $osfQjrimMmilim[$i];
 
 		if ( !isset($links_already_shown[$qijur]) &&
-		   preg_match("|^(.)/([^-]+)|",$qijur,$matches) ) { #קיים קישור ממילה זו
+		   preg_match("|^(.)/([^-]+)|u",$qijur,$matches) ) { #קיים קישור ממילה זו
 
 			if ($format==='wikia')  // in Wikia format, don't show the same link twice in a chapter
 				$links_already_shown[$qijur] = 1;
@@ -368,7 +368,7 @@ function psuqim_in_file($path_from_root_to_file) {
 function potential_psuqim_in_text($text) {
 	global $HEBREW_LETTER, $HEBREW_PRQ;
 
-	if (preg_match_all("/($HEBREW_LETTER+(\s+$HEBREW_LETTER+)?(\s+$HEBREW_LETTER+)?)[ \n\r\t,']+($HEBREW_PRQ)'?[ \n\r\t,']*(\d+)/", $text, $matches))
+	if (preg_match_all("/($HEBREW_LETTER+(\s+$HEBREW_LETTER+)?(\s+$HEBREW_LETTER+)?)[ \n\r\t,']+($HEBREW_PRQ)'?[ \n\r\t,']*(\d+)/u", $text, $matches))
 		return $matches[0];          // ... return entire matches.
 	
 	//print "<p>no psuqim in '$text'!</p>\n"; die;
@@ -384,7 +384,7 @@ function standard_psuqim_in_text($text, $verses_in_numbers=TRUE) {
 	$regexp = $verses_in_numbers? 
 		"(($HEBREW_SFR)\s+($HEBREW_PRQ)\d+)": 
 		"(($HEBREW_SFR)\s+($HEBREW_PRQ)\s+($HEBREW_PRQ))[^א-ת]";
-	if (preg_match_all("/$regexp/", $text, $matches))
+	if (preg_match_all("/$regexp/u", $text, $matches))
 		return $matches[1];          // ... return the outermost parenthesized expression
 
 	//print "<p>no psuqim in '$text'!</p>\n"; die;
@@ -396,7 +396,7 @@ function standard_psuqim_in_text($text, $verses_in_numbers=TRUE) {
  * @return list($link,$text), or NULLs if not found
  */
 function link_to_sfr_prq_o_psuq($text) {
-	global $BOOKS_TO_CODES, $CODES_TO_BOOKS, $HEBREW_PRQ;
+	global $BOOKS_TO_CODES, $CODES_TO_BOOKS, $HEBREW_PRQ, $HEBREW_LETTER_2, $HEBREW_LETTER_1;
 	$HEBREW_BOOK_ALL_FORMS = implode("|",array_keys($BOOKS_TO_CODES));
 
 	$text = str_replace('ספר','',$text);
@@ -404,11 +404,12 @@ function link_to_sfr_prq_o_psuq($text) {
 	$text = str_replace('פסוק','',$text);
 
 
-	if (!preg_match("/^\s*($HEBREW_BOOK_ALL_FORMS)\s*(.*)$/",$text,$matches)) {
+	if (!preg_match("/^\s*($HEBREW_BOOK_ALL_FORMS)\s*(.*)$/u",$text,$matches)) {
 		return array(NULL,NULL);
 	}
 	$book = $matches[1];
 	$text_rest = $matches[2];
+// 	print "<p>book='$book'";
 
 	$text_rest = str_replace('"','',$text_rest);
 	$text_rest = str_replace("'",'',$text_rest);
@@ -418,22 +419,25 @@ function link_to_sfr_prq_o_psuq($text) {
 
 	$base = "/tnk1/prqim";
 
-	if (!preg_match("/^\s*($HEBREW_PRQ)\s*(.*)$/",$text_rest,$matches))
+	if (!preg_match("/^\s*($HEBREW_PRQ)\s*(.*)$/u",$text_rest,$matches))
 		return array("$base/t$book_code.htm", "ספר $book_standard_form");
 	$chapter = $matches[1];
+// 	print "<p>chapter='$chapter'";
 	$text_rest = $matches[2];
-
+// 	print "<p>text_rest='$text_rest'";
+// 	print "<p>pm=".preg_match("/($HEBREW_LETTER_2$HEBREW_LETTER_1)/u",$text_rest,$matches);
+// 	print "<p>matches=".print_r($matches,true);
+	
 	$chapter_number = hebrew2number($chapter);
 	$chapter_code = dechex(floor($chapter_number/10)).($chapter_number%10);
 
 	if (!$text_rest)
 		return array ("$base/t$book_code$chapter_code.htm", "ספר $book_standard_form פרק $chapter");
 
-
-	if (preg_match("/^\s*($HEBREW_PRQ)\s*$/",$text_rest,$matches)) {
+	if (preg_match("/^\s*($HEBREW_PRQ)\s*$/u",$text_rest,$matches)) {
 		$verse = $matches[1];
 		$verse_code = hebrew2number($verse);
-	} elseif (preg_match("/^\s*(\d+)\s*$/",$text_rest,$matches)) {
+	} elseif (preg_match("/^\s*(\d+)\s*$/u",$text_rest,$matches)) {
 		$verse_code = $matches[1];
 		$verse = number2hebrew($verse_code);
 	} else {
@@ -457,7 +461,7 @@ function canonical_name_of_psuq($text) {
 	$text = str_replace('פרק','',$text);
 	$text = str_replace('פסוק','',$text);
 
-	if (!preg_match("/^\s*($HEBREW_BOOK_ALL_FORMS)\s*(.*)$/",$text,$matches)) 
+	if (!preg_match("/^\s*($HEBREW_BOOK_ALL_FORMS)\s*(.*)$/u",$text,$matches)) 
 		return NULL;   // אין ספר
 
 	$book = $matches[1];
@@ -469,7 +473,7 @@ function canonical_name_of_psuq($text) {
 	$book_code = $BOOKS_TO_CODES[$book];
 	$book_standard_form = $CODES_TO_BOOKS[$book_code];
 
-	if (!preg_match("/^\s*($HEBREW_PRQ)\s*(.*)$/",$text_rest,$matches))
+	if (!preg_match("/^\s*($HEBREW_PRQ)\s*(.*)$/u",$text_rest,$matches))
 		return NULL;  // אין פרק
 
 	$chapter = $matches[1];
@@ -478,9 +482,9 @@ function canonical_name_of_psuq($text) {
 	if (!$text_rest)
 		return NULL;  // אין פסוק
 
-	if (preg_match("/^\s*($HEBREW_PRQ)\s*$/",$text_rest,$matches)) {
+	if (preg_match("/^\s*($HEBREW_PRQ)\s*$/u",$text_rest,$matches)) {
 		$verse_code = hebrew2number($matches[1]);
-	} elseif (preg_match("/^\s*(\d+)\s*$/",$text_rest,$matches)) {
+	} elseif (preg_match("/^\s*(\d+)\s*$/u",$text_rest,$matches)) {
 		$verse_code = $matches[1];
 	} else {
 		return NULL;  // אין פסוק
