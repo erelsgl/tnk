@@ -36,9 +36,11 @@ Enter your MySQL username and password, and a name of a database for creating re
 
 D. Verify that there are no errors in the output.
 
-## Use
+## Web apps
 
-Go to http://localhost/tnk/findpsuq.php
+* http://localhost/tnk/findpsuq.php   - find a regular expression in the Tanakh.
+* http://localhost/tnk/find.php       - find a word or a regular expression in the Tanakh, the TNK site and Google.
+* http://localhost/tnk/prjot_1255.php - see the Hebrew date and the weekly Tora portion.
 
 ## Scripts
 * **script/findpsuq_lib.php** - functions for searching regular expressions in the Tanakh verses. 

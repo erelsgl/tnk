@@ -43,7 +43,7 @@ function get_mftx_line($row) {
 	list ($qod, $kotrt, $sug, $ktovt) = $row;
 	$class = hebrew2latin($sug);
 	$ktovt = htmlspecialchars("$linkroot/$ktovt");
-	$sug = str_replace("_"," ",$sug);
+	$sug = @str_replace("_"," ",$sug);
 	$kotrt = str_replace(":", ";", $kotrt);
 
 	$line = htmlspecialchars("$qod.....$kotrt.....$sug");
