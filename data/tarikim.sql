@@ -1,6 +1,5 @@
 CREATE TABLE `tarikim` (
   `kotrt` varchar(255) NOT NULL DEFAULT '',
-  `prq` varchar(16) DEFAULT NULL,
   `psuq` varchar(16) DEFAULT NULL,
   `erua` varchar(32) DEFAULT NULL,
   `yom` tinyint(4) DEFAULT NULL,
@@ -12,5 +11,5 @@ CREATE TABLE `tarikim` (
 
 SET character_set_database=utf8;
 
-LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/tarikim.txt'  INTO TABLE tarikim (kotrt,prq,psuq,erua,yom,xodj,jna);
+LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/tarikim.txt'  INTO TABLE tarikim (kotrt,psuq,erua,yom,xodj,jna);
 
