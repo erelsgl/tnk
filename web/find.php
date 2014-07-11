@@ -31,7 +31,7 @@ $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 require("find_header.php");
 
 $is_local = !empty($GLOBALS['is_local']);
-$linkroot = ($is_local? "http://localhost": "http://tora.us.fm");
+$linkroot = "/";
 
 print "
 <div id='top'>
