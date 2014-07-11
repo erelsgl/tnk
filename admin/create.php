@@ -140,8 +140,8 @@ function create_database_and_user() {
 }
 
 function create_db_connect_params() {
-	$BACKUP_FILEROOT = str_replace('admin','backup',dirname(__FILE__));
-	$BACKUP_WHATSNEW_FILEROOT = dirname(__FILE__) . '/../../whatsnew/tnk/backup';
+	$BACKUP_FILEROOT = str_replace('admin','data',dirname(__FILE__));
+	$BACKUP_WHATSNEW_FILEROOT = dirname(__FILE__) . '/../../whatsnew/tnk/data';
 	mkpath($BACKUP_FILEROOT);
 	mkpath($BACKUP_WHATSNEW_FILEROOT);
 	
