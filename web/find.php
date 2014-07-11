@@ -31,7 +31,7 @@ $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 require("find_header.php");
 
 $is_local = !empty($GLOBALS['is_local']);
-$linkroot = "/";
+$linkroot = "";
 
 print "
 <div id='top'>
@@ -96,11 +96,7 @@ if ($phrase) {
 			$recommended_count += $mftx_recommended_count;
 
 			list($mftx_results,$mftx_count)=mftx_results($phrase_quoted);  // in script/mftx_lib.php
-
-			list($mxbr_results,$mxbr_count)=strstr($linkroot,$_SERVER['HTTP_HOST'])?
-				mxbr_results($phrase_quoted):  // in script/mxbr_lib.php
-				mxbr_results_online($phrase_quoted,
-					"<a href='$linkroot/tnk1/find.php?q=".urlencode(iconv("UTF-8", "Windows-1255", $phrase))."'>רשימה מעודכנת</a>", "UTF-8");
+			list($mxbr_results,$mxbr_count)=mxbr_results($phrase_quoted);  // in script/mxbr_lib.php
 
 			list ($google_results, $google_count) = 
  				!empty($GLOBALS['is_local'])?
