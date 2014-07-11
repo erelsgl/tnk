@@ -170,7 +170,11 @@ or die ("Can't create db_connect_params");
  * Create the database tables based on the data_utf8 folder.
  */
 function create_database_tables() {
-	$configuration_tables = array("psuqim", "psuqim_niqud_milim", "sfrim", "prqim", "miqraot_gdolot", "trgumim_im_ktovt", "QLT_mftx", "prt_tnk1", "board_tnk1");
+	$configuration_tables = array(
+		"psuqim", "psuqim_niqud_milim", "sfrim", "prqim", 
+		"miqraot_gdolot", "trgumim_im_ktovt", 
+		"QLT_mftx", "prt_tnk1", "board_tnk1",
+		"xodjim", "ymim", "tarikim", "prjot_jvua_html");
 	foreach ($configuration_tables as $table)
 		restore_table($table);	
 }

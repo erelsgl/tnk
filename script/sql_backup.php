@@ -44,8 +44,9 @@ function backup_table($table_name, $file_name=NULL) {
 
 	if ($GLOBALS['CREATE_BACKUP_DIRECTORY']) {
 		mkpath ($BACKUP_FILEROOT);
-		if ($BACKUP_WHATSNEW_FILEROOT) 
+		if ($BACKUP_WHATSNEW_FILEROOT) {
 			mkpath ($BACKUP_WHATSNEW_FILEROOT);
+		}
 	}
 
 	if (!$file_name)
@@ -469,6 +470,47 @@ function set_backup_directory($dir, $mkdir=FALSE, $gzip=FALSE) {
 function get_backup_directories() {
 	return glob("$GLOBALS[BACKUP_FILEROOT]/*", GLOB_ONLYDIR);
 }
+
+function run_backup_site() {
+	require_once('html.php');
+	$styles = array('/script/klli.css', '../../script/klli.css');
+	if (!isset($_GET['to'])) {
+		echo xhtml_header("Backup Syntax", '',
+			$styles, '');
+		print "<p>
+			SYNTAX: backup.php?to=[backup|restore|test][configurations=1 to backup configuration tables][users=1 to backup user tables][dir=target_directory_relative_to_'_magr']</p>\n";
+		echo xhtml_footer();
+		exit;
+	}
+	
+	$GLOBALS['to'] = $_GET['to'];
+	$GLOBALS['configurations'] = !empty($_GET['configurations']);
+	$GLOBALS['users']  = !empty($_GET['users']);
+	$GLOBALS['caches'] = !empty($_GET['caches']);
+	$GLOBALS['log'] = !empty($_GET['log']);
+
+	if (isset($_GET['dir'])) {  // custom directory for the backup files
+		set_backup_directory($_GET['dir'], $_GET['to']=='backup', isset($_GET['gz']));
+		$GLOBALS['CREATE_DAILY_BACKUPS'] = false; // no need for daily backup if writing to a custom directory
+		$GLOBALS['configurations'] = $_GET['configurations'] = false;
+		$GLOBALS['users'] = $_GET['users'] = true;
+	}
+	
+	$GLOBALS['DEBUG_SELECT_QUERIES'] = isset($_GET['debug_select']);
+	$GLOBALS['DEBUG_QUERY_TIMES'] = isset($_GET['debug_times']);
+	$GLOBALS['BACKUP_MODIFICATION_QUERIES'] = FALSE; // don't insert the backup-related queries (such as "insert" when retesting) to backup files
+	$GLOBALS['KEEP_CHARACTER_SET_IN_BACKUP'] = FALSE;
+	
+	require_once('html.php');
+	echo xhtml_header("Backup $GLOBALS[to]", '',
+		$styles, ''); 
+	
+	require_once("website.php");
+	run_site($GLOBALS['to']);
+	print "<p>Complete!</p>\n";
+	echo xhtml_footer();
+}
+
 
 
 ?>
