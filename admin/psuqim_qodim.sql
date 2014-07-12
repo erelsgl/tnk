@@ -26,7 +26,7 @@ WHERE next_verse_number>verses_in_chapter
 
 UPDATE psuq_qodm_hba
 INNER JOIN qodm_hba ON(previous_chapter=qodm_hba.hba)
-INNER JOIN mspry_psuqim ON(sfr=book AND prq0=qodm_hba.qodm)
+INNER JOIN mspry_psuqim ON(sfr=book_code AND prq0=qodm_hba.qodm)
 SET 
 	previous_chapter=qodm_hba.qodm,
 	previous_verse_number=count
