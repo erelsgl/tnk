@@ -138,7 +138,6 @@ function create_database_and_user() {
 		sql_query_or_die("
 			CREATE DATABASE $_POST[db_name] 
 			CHARACTER SET utf8");
-		sql_query_or_die("SET storage_engine=MYISAM");
 		$GLOBALS['db_created'] = true;
 	}
 
