@@ -147,7 +147,7 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
 		"");
 
 	$sikum_anchor = ($ktovt_sikum?
-		"<a href='$TNKUrl/tnk1/sikum.php?$ktovt_sikum&utf8=1&find=1'>סיכום</a>": 
+		"<a href='sikum.php?$ktovt_sikum&utf8=1&find=1'>סיכום</a>": 
 		"");
 
 	$trgum_anchor = (
