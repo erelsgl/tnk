@@ -9,8 +9,7 @@ error_reporting(E_ALL);
  * @date 2009-2014
  */
 
-$linkroot = "http://tora.us.fm";
-
+global $TNKUrl;
 $SCRIPT=realpath(dirname(__FILE__)."/../script");
 require_once("$SCRIPT/findpsuq_lib.php");  // main search function
 
@@ -30,7 +29,7 @@ require("find_header.php");
 print "
 <div id='top'>
 	<div class='center'>
-		<h1><a href='$linkroot/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
+		<h1><a href='$TNKUrl/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
 		<form method='get' action=''>
 			היעד:
 			<input id='find' name='q' value='$phrase_html' />

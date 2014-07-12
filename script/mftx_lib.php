@@ -8,11 +8,19 @@ require_once("hebrew.php");
 
 
 function get_exact_match_rows($phrase_quoted) {
-	return sql_query_or_die("SELECT qod, kotrt, sug, ktovt FROM QLT_mftx WHERE qod=$phrase_quoted");
+	global $TNKDb;
+	return sql_query_or_die("
+		SELECT qod, kotrt, sug, ktovt 
+		FROM $TNKDb.QLT_mftx 
+		WHERE qod=$phrase_quoted");
 }
 
 function get_exact_match_rows_without_sfr($phrase_quoted) {
-	$rows = sql_query_or_die("SELECT qod, kotrt, sug, ktovt FROM QLT_mftx WHERE qod=$phrase_quoted AND sug<>'ספר'");
+	global $TNKDb;
+	$rows = sql_query_or_die("
+		SELECT qod, kotrt, sug, ktovt 
+		FROM $TNKDb.QLT_mftx 
+		WHERE qod=$phrase_quoted AND sug<>'ספר'");
 	if (!sql_num_rows($rows)) { // try without double vav/yud
 		$VAV='ו';  $YUD='י';  $OT='[א-ת]';
 		$phrase_quoted = preg_replace("/$VAV+/u","$VAV",$phrase_quoted);
@@ -27,11 +35,19 @@ function get_exact_match_rows_without_sfr($phrase_quoted) {
 }
 
 function get_descending_rows($phrase_quoted, $limit=5) {
-	return sql_query_or_die("SELECT qod, kotrt, sug, ktovt FROM QLT_mftx WHERE qod<$phrase_quoted ORDER BY qod DESC LIMIT $limit");
+	global $TNKDb;
+	return sql_query_or_die("
+		SELECT qod, kotrt, sug, ktovt 
+		FROM $TNKDb.QLT_mftx 
+		WHERE qod<$phrase_quoted ORDER BY qod DESC LIMIT $limit");
 }
 
 function get_ascending_rows($phrase_quoted, $limit=5) {
-	return sql_query_or_die("SELECT qod, kotrt, sug, ktovt FROM QLT_mftx WHERE qod>$phrase_quoted ORDER BY qod ASC LIMIT $limit");
+	global $TNKDb;
+	return sql_query_or_die("
+		SELECT qod, kotrt, sug, ktovt 
+		FROM $TNKDb.QLT_mftx 
+		WHERE qod>$phrase_quoted ORDER BY qod ASC LIMIT $limit");
 }
 
 
@@ -39,10 +55,10 @@ function get_ascending_rows($phrase_quoted, $limit=5) {
  * @param $row a quadruple ($qod, $kotrt, $sug, $ktovt) from QLT_mfxt table
  */
 function get_mftx_line($row) {
-	global $linkroot;
+	global $TNKUrl;
 	list ($qod, $kotrt, $sug, $ktovt) = $row;
 	$class = hebrew2latin($sug);
-	$ktovt = htmlspecialchars("$linkroot/$ktovt");
+	$ktovt = htmlspecialchars("$TNKUrl/$ktovt");
 	$sug = @str_replace("_"," ",$sug);
 	$kotrt = str_replace(":", ";", $kotrt);
 

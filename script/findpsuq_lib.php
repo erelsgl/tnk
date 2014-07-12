@@ -50,7 +50,7 @@ function regexp_error ($phrase) {
  * @param $add_niqud boolean true to add dots (niqud) to the emphasized verses.
  */ 
 function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0,$add_sikum=0) {
-	global $linkroot, $newline;
+	global $TNKUrl, $newline;
 	$result = '';
 	$result_wikisource = '';
 	$kotrt_qodmt=""; $ktovt_qodm=""; $mspr_psuq_qodm=""; $verse_text_bli_niqud_qodmt="";
@@ -77,7 +77,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 			$verse_text_bli_niqud_utf8 = windows1255_to_utf8($verse_text_bli_niqud);
 			++$match_count;
 
-			$anchor = "<a class='psuq' href='$linkroot/tnk1/$ktovt#$mspr_psuq'>$kotrt$mspr_psuq</a>";
+			$anchor = "<a class='psuq' href='$TNKUrl/tnk1/$ktovt#$mspr_psuq'>$kotrt$mspr_psuq</a>";
 
 			$result .= cite_link_item($anchor, $verse_text_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 
@@ -96,7 +96,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 					$jtei_jurot_bli_niqud_utf8 = windows1255_to_utf8($jtei_jurot_bli_niqud);
                                         
 					#using "#mspr_psuq and _blank" causes a strange error on some instances of MSIE (see above)
-					$anchor = "<a class='psuq' href='$linkroot/tnk1/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
+					$anchor = "<a class='psuq' href='$TNKUrl/tnk1/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
 
 					$result .= cite_link_item($anchor, $jtei_jurot_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 
@@ -140,14 +140,14 @@ function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_p
  * @return string
  */
 function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, $add_niqud) {
-	global $linkroot, $newline;
+	global $TNKUrl, $newline;
 
 	$mamr_anchor = ($ktovt_trgum?
-		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$linkroot/")."$ktovt_trgum'>פירוט</a>":
+		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$TNKUrl/")."$ktovt_trgum'>פירוט</a>":
 		"");
 
 	$sikum_anchor = ($ktovt_sikum?
-		"<a href='$linkroot/tnk/sikum.php?$ktovt_sikum&utf8=1&find=1'>סיכום</a>": 
+		"<a href='$TNKUrl/tnk1/sikum.php?$ktovt_sikum&utf8=1&find=1'>סיכום</a>": 
 		"");
 
 	$trgum_anchor = (
@@ -175,6 +175,7 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * @param $find_niqud [boolean] true to find the expression in the dotted (mnuqad) version of the verses.
  */ 
 function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
+	global $TNKDb;
 	//If the phrase contains niqud, look in the column of dotted verse text:
 	$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
 	if ($find_niqud)
@@ -201,16 +202,20 @@ function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
 		mysql_query("set character_set_client=utf8");
 		mysql_query("set character_set_results=utf8"); //changed from 'hebrew'
 		mysql_query("set character_set_database=utf8");
-
-		$query = "
+		$text_field = ($find_niqud? "text_niqud": "text_otiot");
+		$query = ($TNKDb? "
 					SELECT 
-						psuqim.*, 
-						".($find_niqud? "text_niqud": "text_otiot")." as verse_text,
+						psuqim.*, $text_field as verse_text,
 						trgumim_im_ktovt.ktovt AS ktovt_trgum
 					FROM psuqim
-					LEFT JOIN trgumim_im_ktovt 
+					LEFT JOIN $TNKDb.trgumim_im_ktovt AS trgumim_im_ktovt
 					ON(psuqim.id=trgumim_im_ktovt.verse_id)
-					"; 
+					":
+				 "
+					SELECT 
+						psuqim.*, $text_field as verse_text
+					FROM psuqim
+				");
 		if (!preg_match("/[(]/",$phrase) && preg_match("/[|]/",$phrase) ) {
 			$subphrases = explode("|",$phrase);
 			foreach ($subphrases as $subphrase) {

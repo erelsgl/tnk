@@ -40,7 +40,8 @@ function sikum_explanation() {
 function sikum($sfr, $prq, $psuq,
 	$include_miqraotgdolot, $include_navigation, 
 	$include_wikisource, $include_google, $include_etnachta) {
-
+	global $TNKUrl, $TNKDb;
+	
 	if (!$sfr || !$prq || !$psuq) {
 		user_error("Missing sfr/prq/psuq", E_USER_WARNING);
 		return "";
@@ -109,12 +110,12 @@ function sikum($sfr, $prq, $psuq,
 	if ($include_navigation) $sikum .= "\n";
 	else $sikum_wikisource .= "\n";
 
-	if ($include_navigation) {
+	if ($include_navigation && $TNKDb) {
 		/* קרא את כל המאמרים מאתר הניווט בתנך */
 		sql_query_or_die("
 			CREATE TEMPORARY TABLE mamrim
 			SELECT psuq1, bn, kotrt
-			FROM qjr_psuq_tnk1
+			FROM $TNKDb.qjr_psuq_tnk1
 			WHERE sfr = $qod3_sfr_quoted
 			AND prq0 = $ot_prq_quoted
 			AND (
@@ -126,7 +127,7 @@ function sikum($sfr, $prq, $psuq,
 			UNION
 
 			SELECT psuq1, bn, ''
-			FROM qjr_psuq_hgdra
+			FROM $TNKDb.qjr_psuq_hgdra
 			WHERE sfr = $qod3_sfr_quoted
 			AND prq0 = $ot_prq_quoted
 			AND psuq1 BETWEEN $mspr_psuq_0 AND $mspr_psuq_1
@@ -137,7 +138,7 @@ function sikum($sfr, $prq, $psuq,
 		$rows = sql_query_or_die("
 			SELECT prt_tnk1.qod AS qod, prt_tnk1.ktovt AS ktovt, IF(mamrim.kotrt<>'',mamrim.kotrt,prt_tnk1.kotrt) AS kotrt, prt_tnk1.kotrt AS kotrt2
 			FROM mamrim
-			INNER JOIN prt_tnk1 ON(bn=qod)
+			INNER JOIN $TNKDb.prt_tnk1 AS prt_tnk1 ON(bn=qod)
 			");
 		while ($row = sql_fetch_assoc($rows)) {
 			$qod = $row['qod'];

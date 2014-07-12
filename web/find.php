@@ -31,12 +31,12 @@ $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 require("find_header.php");
 
 $is_local = !empty($GLOBALS['is_local']);
-$linkroot = "";
+global $TNKUrl, $TNKDb;
 
 print "
 <div id='top'>
 	<div class='center'>
-		<h1><a href='$linkroot/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
+		<h1><a href='$TNKUrl/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
 		<form method='get' action=''>
 			היעד:
 			<input id='find' name='q' value='$phrase_html' />
@@ -73,15 +73,18 @@ if ($phrase) {
 		// אם המשתמש מבקש שם של ספר, פרק או פסוק - נעביר אותו לשם מייד:
 		list($link,$title) = link_to_sfr_prq_o_psuq($phrase); // in script/psuqim.php
 		if ($link && $title && strpos($phrase," ")) {
-			$link = "$linkroot$link";
+			$link = "$TNKUrl$link";
 
 			// אם המשתמש מבקש פסוק, ויש ביאור על הפסוק - נעביר אותו ישר לביאור:
 			$canonical_name_of_psuq = canonical_name_of_psuq($phrase);
 			if ($canonical_name_of_psuq) {
 				$qod_of_beur = "ביאור:".$canonical_name_of_psuq;
-				$ktovt_beur = sql_evaluate("SELECT ktovt FROM prt_tnk1 WHERE qod=".quote_smart($qod_of_beur));
+				$ktovt_beur = sql_evaluate("
+					SELECT ktovt 
+					FROM $TNKDb.prt_tnk1 
+					WHERE qod=".quote_smart($qod_of_beur));
 				if ($ktovt_beur && preg_match("/^tnk1/",$ktovt_beur))
-					$link = "$linkroot/$ktovt_beur";
+					$link = "$TNKUrl/$ktovt_beur";
 			}
 
 			$recommended_results = "<li>
@@ -168,7 +171,7 @@ if ($phrase) {
 		<div id='tips'>
 		<h2>לא מה שחיפשת?</h2>
 		<ul>
-		<li><a href='$linkroot/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
+		<li><a href='$TNKUrl/tnk1/klli/limud/xipus.html'>עצות ודוגמאות לחיפוש...</a></li>
 		</ul>
 		</div><!--tips-->
 		קישור לחיפוש זה: 

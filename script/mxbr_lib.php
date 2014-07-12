@@ -7,13 +7,17 @@ require_once("../admin/db_connect.php");
 
 
 function mxbr_results($phrase_utf8_quoted) {
-	global $linkroot;
+	global $TNKUrl, $TNKDb;
+	if (!$TNKDb)
+		return array('',0);
 	sql_query_or_die("SET @sdr=0");
 	$rows = sql_query_or_die("
-			SELECT @sdr:=@sdr+1 AS sdr, tarik_hosfa, ktovt, kotrt FROM prt_tnk1
+			SELECT @sdr:=@sdr+1 AS sdr, tarik_hosfa, ktovt, kotrt 
+			FROM $TNKDb.prt_tnk1
 			WHERE m=$phrase_utf8_quoted
 			UNION
-			SELECT @sdr:=@sdr+1 AS sdr, created_at, ktovt_bn, kotrt FROM board_tnk1
+			SELECT @sdr:=@sdr+1 AS sdr, created_at, ktovt_bn, kotrt 
+			FROM $TNKDb.board_tnk1
 			WHERE m=$phrase_utf8_quoted
 			AND sug is null
 			ORDER BY 1 ASC
@@ -25,7 +29,7 @@ function mxbr_results($phrase_utf8_quoted) {
 			$results = "<tr>
 			<td class='sdr'>$row[sdr]</td>
 			<td class='tarik_hosfa'>$row[tarik_hosfa]</td>
-			<td class='kotrt'><a href='$linkroot/$row[ktovt]'>$row[kotrt]</a></td>
+			<td class='kotrt'><a href='$TNKUrl/$row[ktovt]'>$row[kotrt]</a></td>
 			</tr>" . $results;
 		}
 		return array($results,$count);
@@ -35,9 +39,9 @@ function mxbr_results($phrase_utf8_quoted) {
 }
 
 function mxbr_results_online($phrase_utf8_quoted, $link_for_updated_list, $target_encoding) {
-	global $linkroot;
+	global $TNKUrl;
 	$timeout_seconds = 1;
-	$url = "$linkroot/tnk1/mxbr_results.php?q=".urlencode($phrase_utf8_quoted);
+	$url = "$TNKUrl/tnk1/mxbr_results.php?q=".urlencode($phrase_utf8_quoted);
 	$content = @file_get_contents($url,null, stream_context_create(array('http'=>array('timeout' => $timeout_seconds))));
 	if ($content) {
 		$content = iconv("Windows-1255", $target_encoding, $content);
