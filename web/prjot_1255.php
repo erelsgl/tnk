@@ -6,6 +6,7 @@
  */
 
 $SCRIPT=realpath(dirname(__FILE__)."/../script");
+global $TNKUrl;
 
 require_once("$SCRIPT/prjot_1255.php");
 require_once("$SCRIPT/coalesce.php");
@@ -26,10 +27,10 @@ if ($format=='taconite') {
 	$HTML_ENCODING = 'windows-1255';
 	$HTML_DIRECTION = 'rtl';
 	$HTML_LANGUAGE = 'he';
-	print xhtml_header("פרשת השבוע", "", array("/tnk1/_themes/klli.css"))."
+	print xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
 	<!--NiwutElyon0-->
 	<div class='NiwutElyon'>
-	<div class='NiwutElyon'><a href='index.html'>אתר הניווט בתנ&quot;ך</a>&gt;</div>
+	<div class='NiwutElyon'><a href='$TNKUrl/tnk1/'>אתר הניווט בתנ&quot;ך</a>&gt;</div>
 	</div>
 	<!--NiwutElyon1-->
 	".prjot($from_day,$to_day)."
