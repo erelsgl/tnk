@@ -87,13 +87,8 @@ AND   p1.sdr=0;
 
 
 UPDATE prjot p1
-SET 
-	p1.mspr_prq1  = 1 + (
-		select
-			max(p2.qod_prq_snunit)
-		from psuqim_qodim p2
-		where p1.kotrt_sfr = p2.kotrt_sfr
-	)
+INNER JOIN sfrim ON(sfrim.kotrt=p1.kotrt_sfr)
+SET p1.mspr_prq1  = 1 + sfrim.kmut_prqim
 WHERE (p1.mspr_prq1 IS NULL);
 
 
