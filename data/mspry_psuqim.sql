@@ -2,7 +2,7 @@ CREATE TABLE `mspry_psuqim` (
   `sfr` char(3) NOT NULL DEFAULT '',
   `prq0` char(3) NOT NULL DEFAULT '',
   `count` bigint(21) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB CHARACTER SET utf8;
+) ENGINE=MyISAM CHARACTER SET utf8;
 
 SET character_set_database=utf8;
 

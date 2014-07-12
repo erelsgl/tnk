@@ -6,7 +6,7 @@ CREATE TABLE `psuq_qodm_hba` (
   `previous_verse_number` bigint(12) NOT NULL DEFAULT '0',
   `next_chapter` char(3) NOT NULL DEFAULT '',
   `next_verse_number` bigint(12) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB CHARACTER SET utf8;
+) ENGINE=MyISAM CHARACTER SET utf8;
 
 SET character_set_database=utf8;
 

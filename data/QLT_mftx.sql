@@ -5,7 +5,7 @@ CREATE TABLE `QLT_mftx` (
   `ktovt` varchar(160) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   PRIMARY KEY (`qod`,`ktovt`),
   KEY `qod` (`qod`,`sug`)
-) ENGINE=InnoDB CHARACTER SET utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM CHARACTER SET utf8 COLLATE=utf8_unicode_ci;
 
 SET character_set_database=utf8;
 
