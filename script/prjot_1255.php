@@ -13,6 +13,7 @@ require_once(dirname(__FILE__)."/prjot.php");
 $DEBUG_QUERY_TIMES = isset($_GET['debug_times']);
 
 function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE) {
+	global $TNKUrl;
 	list ($year, $month, $day) = explode("-",$jewish_date_1);
 	$month_data = sql_evaluate_assoc("
 		SELECT mspr_nisn, CONCAT(
