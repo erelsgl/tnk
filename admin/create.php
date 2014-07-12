@@ -188,12 +188,13 @@ or die ("Can't create db_connect_params");
  */
 function create_database_tables() {
 	$configuration_tables = array(
-		"psuqim", "psuqim_niqud_milim", "sfrim", "prqim", "qodm_hba", 
+		"psuqim", "psuqim_niqud_milim", "sfrim", "prqim", "sfrim_prqim", "qodm_hba", 
 		"miqraot_gdolot", 
-		"QLT_mftx", 
+		"QLT_mftx", "qjr_tnk1_psuq",
 		"xodjim", "ymim", "tarikim", "prjot_jvua_html");
 	foreach ($configuration_tables as $table)
 		restore_table($table);	
-	sql_queries_or_die(file_get_contents(dirname(__FILE__)."/psuqim_qodim.sql"));
+	sql_queries_or_die(file_get_contents(dirname(__FILE__)."/psuq_qodm_hba.sql"));
+	sql_queries_or_die(file_get_contents(dirname(__FILE__)."/prjot_whftrot.sql"));
 }
 ?>
