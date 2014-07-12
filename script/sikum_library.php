@@ -2,6 +2,7 @@
 error_reporting(E_ALL);
 
 require_once('sikum_verse_queries.php'); // verse_search_results, kotrt_link
+require_once('string.php'); // string_between_regexps
 
 require_once('MediawikiClient.php');  // must be here for rewrite_library.php
 $GLOBALS['MediawikiClient'] = new MediawikiClient("he.wikisource.org");
@@ -295,10 +296,10 @@ function sikum($sfr, $prq, $psuq,
 		$sikum_wikisource .= "\n==מאמרים נוספים - באדיבות [$GLOBALS[GOOGLE_CSE_LINK] גוגל]==\n";
 	
 		$google_search_results = verse_search_results(sql_evaluate_array("
-			SELECT verse_text
-			FROM psuqim_gross
-			WHERE book = $qod3_sfr_quoted
-			AND chapter = $ot_prq_quoted
+			SELECT text_otiot
+			FROM psuqim
+			WHERE book_code = $qod3_sfr_quoted
+			AND chapter_letter = $ot_prq_quoted
 			AND verse_number BETWEEN $mspr_psuq_0 AND $mspr_psuq_1
 			"), /*convert_to_1255=*/FALSE);
 		foreach ($google_search_results as $result) {

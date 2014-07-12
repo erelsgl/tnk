@@ -10,7 +10,7 @@ function etnachta_url($kotrt_sfr, $mspr_prq, $mspr_psuq_0, $mspr_psuq_1) {
  * @param mixed $verse_text string or array of strings
  */
 function verse_queries($verse_text) {
-	require_once(dirname(__FILE__)."/../_script/split_text.php");
+	require_once("split_text.php");
 	$WORDS_PER_GROUP=4;
 	$verse_texts = is_array($verse_text)? $verse_text: array($verse_text);
 	foreach ($verse_texts as &$verse_text) {
