@@ -41,7 +41,7 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 		else
 			$event_html = "";
 		$event_html .= $row['kotrt'];
-		$event_url = "/tnk1/$row[ktovt_prq]#$row[verse_number]";
+		$event_url = "$TNKUrl/tnk1/$row[ktovt_prq]#$row[verse_number]";
 		$event_html .= " (<a href='$event_url'>$row[book_name] $row[chapter_letter]$row[verse_number]</a>)";
 		$jewish_date_events_html .= "<li>$event_html</li>
 		";
@@ -55,6 +55,7 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 }
 
 function prjot($from_day=0, $to_day=0) {
+	global $TNKUrl;
 	$after_sunset_gmt = minutes_after_sunset_gmt() > 0; // 1 between sunset in Israel and midnight GMT, i.e. between sunset and 3:00 AM IDT
 	$gmt_timestamp = time();
 
@@ -83,7 +84,7 @@ function prjot($from_day=0, $to_day=0) {
 	$max_days=7;
 	if ($to_day<$max_days)
 		$jewish_date_events_html .= "
-			<p class='more'>(<a href='prjot_1255.php?format=html&amp;from_day=-$max_days&amp;to_day=$max_days'>עוד תאריכים</a>)</p>";
+			<p class='more'>(<a href='/tnk/prjot_1255.php?format=html&amp;from_day=-$max_days&amp;to_day=$max_days'>עוד תאריכים</a>)</p>";
 
 	$prjot_html = '';
 	if ($to_day==0) {
@@ -105,7 +106,7 @@ function prjot($from_day=0, $to_day=0) {
 				$prjot_html = "
 					<h1>פרשות השבוע</h1>
 					<ul>$prjot_html</ul>
-					<p class='more'>(<a href='klli/limud/prjot4.html'>עוד על החלוקה לפרשות</a>)</p>
+					<p class='more'>(<a href='$TNKUrl/tnk1/klli/limud/prjot4.html'>עוד על החלוקה לפרשות</a>)</p>
 				";
 			}
 		}
