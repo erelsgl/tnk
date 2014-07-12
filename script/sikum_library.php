@@ -111,6 +111,7 @@ function sikum($sfr, $prq, $psuq,
 	else $sikum_wikisource .= "\n";
 
 	if ($include_navigation && $TNKDb) {
+		print 123;
 		/* קרא את כל המאמרים מאתר הניווט בתנך */
 		sql_query_or_die("
 			CREATE TEMPORARY TABLE mamrim

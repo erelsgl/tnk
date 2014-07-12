@@ -80,15 +80,16 @@ if (!$qod_sfr || !$mspr_prq || !$mspr_psuq) {
 	die;
 }
 
-if (!empty($GLOBALS['is_local'])) {
-	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
-			/*$include_mikraotgdolot=*/TRUE,
-			/*$include_navigation=*/FALSE,
-			/*$include_wikisource=*/FALSE,
-			/*$include_google=*/FALSE,
-			/*$include_etnachta=*/FALSE
-			);
-} else if (isset($_GET['nav'])) {
+// if (!empty($GLOBALS['is_local'])) {
+// 	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
+// 			/*$include_mikraotgdolot=*/TRUE,
+// 			/*$include_navigation=*/FALSE,
+// 			/*$include_wikisource=*/FALSE,
+// 			/*$include_google=*/FALSE,
+// 			/*$include_etnachta=*/FALSE
+// 			);
+// } else 
+if (isset($_GET['nav'])) {
 	print sikum($qod_sfr, $mspr_prq, $mspr_psuq,
 		/*$include_mikraotgdolot=*/TRUE,
 		/*$include_navigation=*/TRUE,
