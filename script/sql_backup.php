@@ -52,7 +52,7 @@ function backup_table($table_name, $file_name=NULL) {
 	if (!$file_name)
 		$file_name = $table_name;
 
-	@copy("$BACKUP_FILEROOT/$file_name.txt", "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".txt");
+	@copy("$BACKUP_FILEROOT/$file_name.txt", "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".tmp.txt");
 	// initialize file:
 	if (file_put_contents("$BACKUP_FILEROOT/$file_name.txt", "")===false)
 		return user_error("Can't write to backup file $file_name!", E_USER_WARNING);
@@ -102,7 +102,7 @@ function backup_table($table_name, $file_name=NULL) {
 		return user_error("Can't write to backup file $BACKUP_FILEROOT/$file_name definition!", E_USER_WARNING);
 
 	if ($CREATE_DAILY_BACKUPS) {
-		$daily_backup = "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".sql";
+		$daily_backup = "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".tmp.sql";
 		if (!file_exists($daily_backup))
 			file_put_contents($daily_backup, $definition, FILE_APPEND);  // this file always keeps all actions
 		else
@@ -119,7 +119,7 @@ function backup_table($table_name, $file_name=NULL) {
 	}
 
 	if (!$CREATE_DAILY_BACKUPS) { // Everything is OK, so we can remove the daily backup (if it exists)
-		@unlink("$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".txt");
+		@unlink("$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".tmp.txt");
 	}
 }
 
@@ -165,7 +165,7 @@ function backup_query_results($query, $file_name, $file_write_flags=0) {
 		return user_error("Can't write to backup file $file_name!", E_USER_WARNING);
 
 	if ($CREATE_DAILY_BACKUPS)
-		copy ("$BACKUP_FILEROOT/$file_name.txt", "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".txt");
+		copy ("$BACKUP_FILEROOT/$file_name.txt", "$BACKUP_FILEROOT/$file_name-" . date("ymd") . ".tmp.txt");
 	if ($BACKUP_WHATSNEW_FILEROOT) copy ("$BACKUP_FILEROOT/$file_name.txt", "$BACKUP_WHATSNEW_FILEROOT/$file_name.txt");
 }
 
@@ -202,7 +202,7 @@ function backup_table_query($table_name, $query) {
 		if (!file_put_contents("$BACKUP_FILEROOT/$table_name.sql", $query, FILE_APPEND))
 			return user_error("Can't write to backup file of table $table_name!", E_USER_WARNING);
 		if ($CREATE_DAILY_BACKUPS)
-			if (!file_put_contents("$BACKUP_FILEROOT/$table_name-" . date("ymd") . ".sql", $query, FILE_APPEND))
+			if (!file_put_contents("$BACKUP_FILEROOT/$table_name-" . date("ymd") . ".tmp.sql", $query, FILE_APPEND))
 				return user_error("Can't write to daily backup file of table $table_name!", E_USER_WARNING);
 
 		if ($GLOBALS['CREATE_BACKUP_DIRECTORY']) {
