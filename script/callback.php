@@ -6,8 +6,7 @@
  * @date 2006-09
  */
 
-	
-	
+require_once("coalesce.php");
 	
 /**
 * Set this variable to TRUE to disable all redirects, for debug purposes.
