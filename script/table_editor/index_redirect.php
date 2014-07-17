@@ -14,6 +14,8 @@ else
 //Erel
 require_once dirname(__FILE__) . '/../callback.php';
 $params = substr($uri, strpos($uri,'?')+1);
-$GLOBALS['RedirectSystem']->redirect_back_with_message($params, (isset($message)?$message:"") );
+
+//$GLOBALS['RedirectSystem']->redirect_back_with_message($params, (isset($message)?$message:"") );
+$GLOBALS['RedirectSystem']->redirect_back($params);
 
 ?>
