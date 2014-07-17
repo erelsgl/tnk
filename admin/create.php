@@ -53,7 +53,7 @@ function show_create_page() {
 	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
 	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
 	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
-	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKDb'],''));
+	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKDb'],'tnk'));
 	
 	// read("Host name", "hostname");
 	print "
@@ -145,7 +145,7 @@ function create_database_and_user() {
 	$db_user_quoted = quote_smart($_POST['db_user'])."@".quote_smart($_POST['db_host']);
 	sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[db_name].* 
 		TO $db_user_quoted IDENTIFIED BY ".quote_all($_POST['db_pass'])." WITH GRANT OPTION");
-	if ($_POST[TNKDb]) {
+	if ($_POST['TNKDb']) {
 		sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[TNKDb].*
 		TO $db_user_quoted IDENTIFIED BY ".quote_all($_POST['db_pass'])." WITH GRANT OPTION");
 	}
