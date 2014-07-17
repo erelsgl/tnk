@@ -28,6 +28,7 @@ require_once dirname(__FILE__).'/records_navigation.php'; // Echo records naviga
 require_once dirname(__FILE__).'/search.php'; // Echo records navigation for multipage browsing
 
 require_once dirname(__FILE__).'/../callback.php';  // Erel
+require_once dirname(__FILE__).'/../coalesce.php';  // Erel
 
 function echo_heading_row($visible_fields,$OrderField) {
     global $base_url;
