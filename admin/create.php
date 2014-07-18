@@ -42,7 +42,6 @@ function read($vartitle, $varname) {
 
 function show_create_page() {
 	@include_once(dirname(__FILE__) . "/db_connect_params.php"); // only if it exists
-// 	set_coalesce($GLOBALS['hostname'], trim(shell_exec('hostname -I'))?:'localhost');
 	set_coalesce($GLOBALS['root_username'], coalesce($GLOBALS['root_username'],'root'));
 	set_coalesce($GLOBALS['root_password'], coalesce($GLOBALS['root_password'],''));
 	set_coalesce($GLOBALS['db_host'], coalesce($GLOBALS['db_host'],'localhost'));
@@ -55,7 +54,6 @@ function show_create_page() {
 	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
 	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKDb'],'tnk1'));
 	
-	// read("Host name", "hostname");
 	print "
 ## Credentials
 
