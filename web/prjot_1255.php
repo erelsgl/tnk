@@ -27,11 +27,6 @@ if ($format=='taconite') {
 	$content
 	</replaceContent>
 	".jquery_taconite_footer();
-} else if ($format=='html') {
-	print //xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
-	$content
-	//".xhtml_footer()
-	;
 } else {
 	print xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
 	<!--NiwutElyon0-->
@@ -39,7 +34,9 @@ if ($format=='taconite') {
 	<div class='NiwutElyon'><a href='$TNKUrl/tnk1/'>אתר הניווט בתנ&quot;ך</a>&gt;</div>
 	</div>
 	<!--NiwutElyon1-->
+	<div id='content'>
 	$content
+	</div>
 	".xhtml_footer();
 }
 ?>
