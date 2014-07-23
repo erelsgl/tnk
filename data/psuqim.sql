@@ -6,8 +6,10 @@ CREATE TABLE `psuqim` (
   `verse_number` int(11) NOT NULL DEFAULT '0',
   `verse_letter` char(3) DEFAULT NULL,
   `text_otiot` text,
+  `text_maqafim` text,
   `text_niqud` text,
   `text_teamim` text,
+  `after_text` varchar(15) DEFAULT NULL,
   `ktovt_prq` varchar(16) DEFAULT NULL,
   `ktovt_sikum` varchar(30) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -15,5 +17,5 @@ CREATE TABLE `psuqim` (
 
 SET character_set_database=utf8;
 
-LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/psuqim.txt'  INTO TABLE psuqim (id,book_code,book_name,chapter_letter,verse_number,verse_letter,text_otiot,text_niqud,text_teamim,ktovt_prq,ktovt_sikum);
+LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/psuqim.txt'  INTO TABLE psuqim (id,book_code,book_name,chapter_letter,verse_number,verse_letter,text_otiot,text_maqafim,text_niqud,text_teamim,after_text,ktovt_prq,ktovt_sikum);
 
