@@ -7,6 +7,7 @@ CREATE TABLE `sfrim` (
   `qod_mlbim` char(2) DEFAULT NULL,
   `kmut_prqim` int(11) NOT NULL DEFAULT '0',
   `xtiva` char(15) DEFAULT NULL,
+  `sfr_msora` char(25) DEFAULT NULL,
   `qod_snunit` char(4) DEFAULT NULL,
   `qod_sacred_texts` char(3) DEFAULT NULL,
   `qod_mfrjim` char(3) DEFAULT NULL,
@@ -24,5 +25,5 @@ CREATE TABLE `sfrim` (
 
 SET character_set_database=utf8;
 
-LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/sfrim.txt'  INTO TABLE sfrim (qod,qod_2otiot,kotrt,mspr_psukomat,qod_mamre,qod_mlbim,kmut_prqim,xtiva,qod_snunit,qod_sacred_texts,qod_mfrjim,qod_hareidi,booklevel_psuqomat);
+LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/sfrim.txt'  INTO TABLE sfrim (qod,qod_2otiot,kotrt,mspr_psukomat,qod_mamre,qod_mlbim,kmut_prqim,xtiva,sfr_msora,qod_snunit,qod_sacred_texts,qod_mfrjim,qod_hareidi,booklevel_psuqomat);
 

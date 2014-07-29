@@ -1,39 +1,39 @@
-ברא	בר	בראשית	1	01	br	50	תורה	bras	gen	001	Genesis	1
-שמת	שמ	שמות	2	02	jm	40	תורה	smut	exo	002	Exodus	2
-ויק	וי	ויקרא	3	03	wy	27	תורה	uikr	lev	003	Leviticus	1
-במד	במ	במדבר	4	04	bm	36	תורה	bmdb	num	004	Numbers	5
-דבר	דמ	דברים	5	05	dm	34	תורה	dbri	deu	005	Deuteronomy	5
-יהש	יע	יהושע	6	06	ya	24	נביאים ראשונים	ihus	jos	006	Joshua	1
-שופ	שפ	שופטים	7	07	jf	21	נביאים ראשונים	supt	jdg	007	Judges	1
-שמא	שא	שמואל א	8	08a	ja	31	נביאים ראשונים	smua	sa1	008	1_Samuel	1
-שמב	שב	שמואל ב	9	08b	jb	24	נביאים ראשונים	smub	sa2	009	2_Samuel	1
-מלא	מא	מלכים א	10	09a	ma	22	נביאים ראשונים	mlca	kg1	010	1_Kings	2
-מלב	מב	מלכים ב	11	09b	mb	25	נביאים ראשונים	mlcb	kg2	011	2_Kings	2
-ישע	יש	ישעיהו	12	10	yj	66	נביאים אחרונים	isai	isa	012	Isaiah	3
-ירמ	יר	ירמיהו	13	11	yr	52	נביאים אחרונים	irmi	jer	013	Jeremiah	3
-יחז	יח	יחזקאל	14	12	yx	48	נביאים אחרונים	ijzk	eze	014	Ezekiel	3
-הוש	הו	הושע	15	13	ho	14	נביאים אחרונים	husa	hos	015	Hosea	4
-יאל	יל	יואל	16	14	yl	4	נביאים אחרונים	iual	joe	016	Joel	0
-עמס	עמ	עמוס	17	15	am	9	נביאים אחרונים	amus	amo	017	Amos	2
-עבד	עב	עובדיה	18	16	ov	1	נביאים אחרונים	aubd	oba	018	Obadiah	0
-ינה	ינ	יונה	19	17	yn	4	נביאים אחרונים	iunh	jon	019	Jonah	0
-מכה	מי	מיכה	20	18	mi	7	נביאים אחרונים	mich	mic	020	Micah	0
-נחו	נם	נחום	21	19	nm	3	נביאים אחרונים	njum	nah	021	Nahum	0
-חבק	חב	חבקוק	22	20	xv	3	נביאים אחרונים	jbku	hab	022	Habakkuk	0
-צפנ	צפ	צפניה	23	21	cf	3	נביאים אחרונים	zpni	zep	023	Zephaniah	0
-חגי	חג	חגי	24	22	xg	2	נביאים אחרונים	jgii	hag	024	Haggai	0
-זכר	זכ	זכריה	25	23	zk	14	נביאים אחרונים	zcri	zac	025	Zechariah	2
-מלכ	מל	מלאכי	26	24	ml	3	נביאים אחרונים	mlac	mal	026	Malachi	2
-תהל	תה	תהלים	27	26	th	150	כתובים	thil	psa	027	Psalms	4
-משל	מש	משלי	28	28	mj	31	כתובים	msli	pro	028	Proverbs	2
-איב	אב	איוב	29	27	yv	42	כתובים	aiub	job	029	Job	4
-שיר	שש	שיר השירים	30	30	jj	8	כתובים	sir-	sol	030	Song_of_Songs	3
-רות	רו	רות	31	29	ru	4	כתובים	rut-	rut	031	Ruth	1
-אכה	אכ	איכה	32	32	ei	5	כתובים	aich	lam	032	Lamentations	0
-קהל	קה	קהלת	33	31	qh	12	כתובים	kuhl	ecc	033	Ecclesiastes	2
-סתר	אס	אסתר	34	33	es	10	כתובים	astr	est	034	Esther	0
-דני	דנ	דניאל	35	34	dn	12	כתובים	dnii	dan	039	Daniel	0
-עזר	עז	עזרא	36	35a	ez	10	כתובים	azra	ezr	035	Ezra	2
-נחמ	נה	נחמיה	37	35b	nh	13	כתובים	njmi	neh	036	Nehemiah	2
-דהא	דא	דברי הימים א	38	25a	da	29	כתובים	dbra	ch1	037	1_Chronicles	0
-דהב	דב	דברי הימים ב	39	25b	db	36	כתובים	dbrb	ch2	038	2_Chronicles	0
+ברא	בר	בראשית	1	01	br	50	תורה	ספר בראשית/	bras	gen	001	Genesis	1
+שמת	שמ	שמות	2	02	jm	40	תורה	ספר שמות/	smut	exo	002	Exodus	2
+ויק	וי	ויקרא	3	03	wy	27	תורה	ספר ויקרא/	uikr	lev	003	Leviticus	1
+במד	במ	במדבר	4	04	bm	36	תורה	ספר במדבר/	bmdb	num	004	Numbers	5
+דבר	דמ	דברים	5	05	dm	34	תורה	ספר דברים/	dbri	deu	005	Deuteronomy	5
+יהש	יע	יהושע	6	06	ya	24	נביאים ראשונים	ספר יהושע/	ihus	jos	006	Joshua	1
+שופ	שפ	שופטים	7	07	jf	21	נביאים ראשונים	ספר שופטים/	supt	jdg	007	Judges	1
+שמא	שא	שמואל א	8	08a	ja	31	נביאים ראשונים	ספר שמואל/שמ"א	smua	sa1	008	1_Samuel	1
+שמב	שב	שמואל ב	9	08b	jb	24	נביאים ראשונים	ספר שמואל/שמ"ב	smub	sa2	009	2_Samuel	1
+מלא	מא	מלכים א	10	09a	ma	22	נביאים ראשונים	ספר מלכים/מל"א	mlca	kg1	010	1_Kings	2
+מלב	מב	מלכים ב	11	09b	mb	25	נביאים ראשונים	ספר מלכים/מל"ב	mlcb	kg2	011	2_Kings	2
+ישע	יש	ישעיהו	12	10	yj	66	נביאים אחרונים	ספר ישעיהו/	isai	isa	012	Isaiah	3
+ירמ	יר	ירמיהו	13	11	yr	52	נביאים אחרונים	ספר ירמיהו/	irmi	jer	013	Jeremiah	3
+יחז	יח	יחזקאל	14	12	yx	48	נביאים אחרונים	ספר יחזקאל/	ijzk	eze	014	Ezekiel	3
+הוש	הו	הושע	15	13	ho	14	נביאים אחרונים	ספר תרי עשר/הושע	husa	hos	015	Hosea	4
+יאל	יל	יואל	16	14	yl	4	נביאים אחרונים	ספר תרי עשר/יואל	iual	joe	016	Joel	0
+עמס	עמ	עמוס	17	15	am	9	נביאים אחרונים	ספר תרי עשר/עמוס	amus	amo	017	Amos	2
+עבד	עב	עובדיה	18	16	ov	1	נביאים אחרונים	ספר תרי עשר/עבדיה	aubd	oba	018	Obadiah	0
+ינה	ינ	יונה	19	17	yn	4	נביאים אחרונים	ספר תרי עשר/יונה	iunh	jon	019	Jonah	0
+מכה	מי	מיכה	20	18	mi	7	נביאים אחרונים	ספר תרי עשר/מיכה	mich	mic	020	Micah	0
+נחו	נם	נחום	21	19	nm	3	נביאים אחרונים	ספר תרי עשר/נחום	njum	nah	021	Nahum	0
+חבק	חב	חבקוק	22	20	xv	3	נביאים אחרונים	ספר תרי עשר/חבקוק	jbku	hab	022	Habakkuk	0
+צפנ	צפ	צפניה	23	21	cf	3	נביאים אחרונים	ספר תרי עשר/צפניה	zpni	zep	023	Zephaniah	0
+חגי	חג	חגי	24	22	xg	2	נביאים אחרונים	ספר תרי עשר/חגי	jgii	hag	024	Haggai	0
+זכר	זכ	זכריה	25	23	zk	14	נביאים אחרונים	ספר תרי עשר/זכריה	zcri	zac	025	Zechariah	2
+מלכ	מל	מלאכי	26	24	ml	3	נביאים אחרונים	ספר תרי עשר/מלאכי	mlac	mal	026	Malachi	2
+תהל	תה	תהלים	27	26	th	150	כתובים	ספר תהלים/	thil	psa	027	Psalms	4
+משל	מש	משלי	28	28	mj	31	כתובים	ספר משלי/	msli	pro	028	Proverbs	2
+איב	אב	איוב	29	27	yv	42	כתובים	ספר איוב/	aiub	job	029	Job	4
+שיר	שש	שיר השירים	30	30	jj	8	כתובים	מגילת שיר השירים/	sir-	sol	030	Song_of_Songs	3
+רות	רו	רות	31	29	ru	4	כתובים	מגילת רות/	rut-	rut	031	Ruth	1
+אכה	אכ	איכה	32	32	ei	5	כתובים	מגילת איכה/	aich	lam	032	Lamentations	0
+קהל	קה	קהלת	33	31	qh	12	כתובים	מגילת קהלת/	kuhl	ecc	033	Ecclesiastes	2
+סתר	אס	אסתר	34	33	es	10	כתובים	מגילת אסתר/	astr	est	034	Esther	0
+דני	דנ	דניאל	35	34	dn	12	כתובים	ספר דניאל/	dnii	dan	039	Daniel	0
+עזר	עז	עזרא	36	35a	ez	10	כתובים	ספר עזרא/עזרא	azra	ezr	035	Ezra	2
+נחמ	נה	נחמיה	37	35b	nh	13	כתובים	ספר עזרא/נחמיה	njmi	neh	036	Nehemiah	2
+דהא	דא	דברי הימים א	38	25a	da	29	כתובים	ספר דברי הימים/דה"א	dbra	ch1	037	1_Chronicles	0
+דהב	דב	דברי הימים ב	39	25b	db	36	כתובים	ספר דברי הימים/דה"ב	dbrb	ch2	038	2_Chronicles	0
