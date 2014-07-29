@@ -41,7 +41,7 @@ function sikum_explanation() {
 function sikum($sfr, $prq, $psuq,
 	$include_miqraotgdolot, $include_navigation, 
 	$include_wikisource, $include_google, $include_etnachta) {
-	global $TNKUrl, $TNKDb;
+	global $TNKUrl, $TNKDb, $is_local;
 	
 	if (!$sfr || !$prq || !$psuq) {
 		user_error("Missing sfr/prq/psuq", E_USER_WARNING);
@@ -191,9 +191,9 @@ function sikum($sfr, $prq, $psuq,
 
 		for ($mspr_psuq=$mspr_psuq_0; $mspr_psuq<=$mspr_psuq_1; ++$mspr_psuq) {
 			$ot_psuq = sql_evaluate("SELECT kotrt FROM prqim WHERE mspr=$mspr_psuq");
-			$titles_backlinks = $GLOBALS['MediawikiClient']->titles_backlinks("$kotrt_sfr $ot_prq $ot_psuq", 500);
-			$titles_category = $GLOBALS['MediawikiClient']->titles_categorymembers("$kotrt_sfr $ot_prq $ot_psuq", 500);
-			$titles_category_backlinks = $GLOBALS['MediawikiClient']->titles_backlinks("קטגוריה:$kotrt_sfr $ot_prq $ot_psuq", 500);
+			$titles_backlinks = $is_local? array(): $GLOBALS['MediawikiClient']->titles_backlinks("$kotrt_sfr $ot_prq $ot_psuq", 500);
+			$titles_category = $is_local? array(): $GLOBALS['MediawikiClient']->titles_categorymembers("$kotrt_sfr $ot_prq $ot_psuq", 500);
+			$titles_category_backlinks = $is_local? array(): $GLOBALS['MediawikiClient']->titles_backlinks("קטגוריה:$kotrt_sfr $ot_prq $ot_psuq", 500);
 			$wikisource_titles = array_unique(array_merge($titles_backlinks,$titles_category,$titles_category_backlinks));
 	
 			foreach ($wikisource_titles as &$title) {
@@ -360,7 +360,8 @@ function redundant_wikisource_title($title, $kotrt_sfr, $ot_prq, $ot_psuq) {
 
 
 function miqraot_gdolot($sfr, $prq, $psuq) {
-	if (!empty($GLOBALS['is_local'])) {
+	global $is_local;
+	if ($is_local) {
 		$contents = sql_evaluate("SELECT parsed FROM miqraot_gdolot WHERE book_name='$sfr' AND chapter_letter='$prq' AND verse_letter='$psuq'");
 	} else {
 		$title = "{{ציטוטים של מקראות גדולות על פסוק|$sfr|$prq|-|$psuq|-|}}";
