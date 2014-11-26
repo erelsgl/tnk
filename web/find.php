@@ -177,7 +177,7 @@ if ($phrase) {
 		</ul>
 		</div><!--tips-->
 		קישור לחיפוש זה: 
-		<a href='?q=$phrase&add_niqud=$add_niqud&add_sikum=$add_sikum&reverse=$reverse'>$phrase</a>
+		<a href='?q=$phrase&add_niqud=$add_niqud&add_sikum=$add_sikum&no_spaces=$no_spaces&reverse=$reverse'>$phrase</a>
 		";
 }
 	
