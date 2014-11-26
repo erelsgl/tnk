@@ -40,6 +40,42 @@ function regexp_error ($phrase) {
 	}
 }
 
+
+
+/**
+ * If $emphasize_phrase is true, return two versions of the verse in which the phrase is emphasized.
+ *
+ * @param sting $verse_text_bli_niqud
+ * @param sting $phrase
+ * @param boolean $emphasize_phrase
+ * @return multitype:string
+ */
+function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase, $no_spaces) {
+	if (!$emphasize_phrase)
+		return array($verse_text_bli_niqud,$verse_text_bli_niqud);
+
+	$phrase_without_spaces =
+	preg_replace("/^\s+/","",
+			preg_replace("/\s+$/","",
+					$phrase));
+
+	/* Change placeholders, i.e. "\1" to "\2", "\2" to "\3", etc., to make room for the new parentheses: */
+	for ($i=8; $i>=1; --$i)
+		$phrase_without_spaces = str_replace("\\".$i, "\\".($i+1), $phrase_without_spaces);
+	
+	/* Add new parentheses for replacement: */
+	$needle = ($no_spaces?
+			"/($phrase_without_spaces)/":
+			"/([^ ]*{$phrase_without_spaces}[^ ]*)/"
+	);
+
+	$emphasized_for_html = preg_replace($needle,"<b>$1</b>", $verse_text_bli_niqud);
+	$emphasized_for_wikisource = preg_replace($needle,"'''$1'''", $verse_text_bli_niqud);
+	return array($emphasized_for_html,$emphasized_for_wikisource);
+}
+
+
+
 /**
  * Internal function - search a regular expression in SQL SELECT results.
  * 
@@ -49,7 +85,7 @@ function regexp_error ($phrase) {
  * @param $single_verse boolean true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
  * @param $add_niqud boolean true to add dots (niqud) to the emphasized verses.
  */ 
-function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0,$add_sikum=0) {
+function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0,$add_sikum=0,$no_spaces=0) {
 	global $TNKUrl, $newline;
 	$result = '';
 	$result_wikisource = '';
@@ -73,7 +109,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 		$verse_text_bli_niqud = utf8_to_windows1255($verse_text_bli_niqud_utf8);
 
 		if (preg_match("/$phrase/",$verse_text_bli_niqud)) {
-			list($verse_text_bli_niqud, $verse_text_bli_niqud_wikisource) = emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase);
+			list($verse_text_bli_niqud, $verse_text_bli_niqud_wikisource) = emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase, $no_spaces);
 			$verse_text_bli_niqud_utf8 = windows1255_to_utf8($verse_text_bli_niqud);
 			++$match_count;
 
@@ -89,7 +125,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 			if ($verse_text_bli_niqud_qodmt && !$single_verse) {
 				$jtei_jurot_bli_niqud = "$verse_text_bli_niqud_qodmt $verse_text_bli_niqud";
 				if (preg_match("/$phrase/",$jtei_jurot_bli_niqud)) {
-					list($jtei_jurot_bli_niqud, $jtei_jurot_bli_niqud_wikisource) = emphasize_phrase_if_needed ($jtei_jurot_bli_niqud, $phrase, $emphasize_phrase);
+					list($jtei_jurot_bli_niqud, $jtei_jurot_bli_niqud_wikisource) = emphasize_phrase_if_needed ($jtei_jurot_bli_niqud, $phrase, $emphasize_phrase, $no_spaces);
 
 					++$match_count;
                                         
@@ -111,29 +147,6 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 	return array($result, $result_wikisource, $match_count);
 }
 
-
-/**
- * If $emphasize_phrase is true, return two versions of the verse in which the phrase is emphasized.
- *  
- * @param sting $verse_text_bli_niqud
- * @param sting $phrase
- * @param boolean $emphasize_phrase
- * @return multitype:string
- */
-function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_phrase) {
-	if ($emphasize_phrase) {
-		$phrase_without_spaces = 
-			preg_replace("/^\s+/","",
-			preg_replace("/\s+$/","",
-			$phrase));
-		return array(
-			preg_replace("/([^ ]*{$phrase_without_spaces}[^ ]*)/","<b>$1</b>", $verse_text_bli_niqud),
-			preg_replace("/($phrase_without_spaces)/","'''$1'''", $verse_text_bli_niqud)
-			);
-	} else {
-		return array($verse_text_bli_niqud,$verse_text_bli_niqud);
-	}
-}
 
 /**
  * Create an HTML LI element with the given verse.
@@ -172,9 +185,10 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * @param $phrase the regular expression to look for.
  * @param $single_verse [boolean] - true to find matches in 1 verse, false to find matches also in 2 adjacent verses.
  * @param $add_niqud [boolean] - true to display the verses with dots ("niqud").
- * @param $find_niqud [boolean] true to find the expression in the dotted (mnuqad) version of the verses.
+ * @param $find_niqud [boolean] - true to find the expression in the dotted (mnuqad) version of the verses.
+ * @param $with_spaces [boolean] - false to remove spaces from the verse (search letters only)
  */ 
-function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
+function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces) {
 	global $TNKDb;
 	//If the phrase contains niqud, look in the column of dotted verse text:
 	$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
@@ -203,6 +217,8 @@ function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
 		mysql_query("set character_set_results=utf8"); //changed from 'hebrew'
 		mysql_query("set character_set_database=utf8");
 		$text_field = ($find_niqud? "text_niqud": "text_otiot");
+		if ($no_spaces)
+			$text_field = "REPLACE($text_field,' ','')";
 		$query = ($TNKDb? "
 					SELECT 
 						psuqim.*, $text_field as verse_text,
@@ -220,13 +236,13 @@ function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum) {
 			$subphrases = explode("|",$phrase);
 			foreach ($subphrases as $subphrase) {
 				$verses = sql_query_or_die($query);
-				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud, $add_sikum);
+				list ($results, $results_wikisource, $match_count) = search_results($verses,$subphrase,TRUE, $single_verse, $add_niqud, $add_sikum, $no_spaces);
 				$fullbody .= "<h2>$subphrase</h2>\n";
 				$fullbody .= $results;
 			}
 		} else {
 			$verses = sql_query_or_die($query);
-			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud, $add_sikum);
+			list ($results, $results_wikisource, $match_count) = search_results($verses,$phrase,$emphasize_phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces);
 			$fullbody .= $results;
 		}
 		if ($fullbody)
