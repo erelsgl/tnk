@@ -119,7 +119,10 @@ function niqud_psuq($matches) {
 		}
 	}
 
-	$citut_mnuqd = str_replace("{{HIRIKWITHOUTLETTER}}","<i>י</i>",$citut_mnuqd);
+	$citut_mnuqd = str_replace("{{HIRIKWITHOUTLETTER}}",
+			//"<i>י</i>",
+			"י",
+			$citut_mnuqd);
 	$new_contents = str_replace($citut_mqori,$citut_mnuqd,$contents);
 
 	if (is_too_shorter($new_contents,$contents)) {
