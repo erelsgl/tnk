@@ -119,6 +119,7 @@ function niqud_psuq($matches) {
 		}
 	}
 
+	$citut_mnuqd = str_replace("{{HIRIK WITHOUT LETTER}}","<i>י</i>",$citut_mnuqd);
 	$new_contents = str_replace($citut_mqori,$citut_mnuqd,$contents);
 
 	if (is_too_shorter($new_contents,$contents)) {
