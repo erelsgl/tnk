@@ -19,7 +19,7 @@ function fix_regexp($phrase) {
 	if (!preg_match("|\\[|",$phrase))
 		$phrase = preg_replace("/-/"," ",$phrase);
 	$phrase = preg_replace("/ +/", " ", $phrase);
-	$quote = "'\"";
+	$quote = "\"";  // do not remove single dash - it is used!
 	$phrase = preg_replace("/[$quote><&\\/]/","",$phrase);
 	return $phrase;
 }

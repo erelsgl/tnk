@@ -45,7 +45,10 @@ print "
 
 
 if ($phrase) {
+	//print "\$phrase=$phrase";
 	$fixed_phrase = fix_regexp($phrase);
+	//print "\$phrase=$fixed_phrase";
+	
 	if ($reverse)
 		$fixed_phrase = mb_strrev($fixed_phrase);
 	
