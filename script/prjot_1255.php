@@ -51,7 +51,12 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 		$jewish_date_events_html="<ul>$jewish_date_events_html</ul>";
 	else
 		$jewish_date_events_html = $notify_if_not_found? "לא נמצאו אירועים במאגר הנתונים": "";
-	return "<h1>$title $jewish_date_name</h1>
+
+  $year_for_yovel = $year-5775;
+  $year_for_jmita = $year_for_yovel % 7;
+  $new_year_name = "שנה $year_for_jmita לשמיטה ו $year_for_yovel ליובל הראשון בעידן הירושה השלישית";
+	$new_year_link = "http://tora.us.fm/tnk1/msr/yovl.html"; 
+	return "<h1>$title $jewish_date_name; <a href='$new_year_link'>$new_year_name</a>.</h1>
 		$jewish_date_events_html";
 }
 
