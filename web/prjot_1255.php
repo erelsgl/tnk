@@ -27,7 +27,7 @@ if ($format=='taconite') {
 	$content
 	</replaceContent>
 	".jquery_taconite_footer();
-} else {
+} else if ($format=='html') {
 	print xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
 	<!--NiwutElyon0-->
 	<div class='NiwutElyon'>
@@ -38,5 +38,11 @@ if ($format=='taconite') {
 	$content
 	</div>
 	".xhtml_footer();
+} else { // if ($format=='content') { 
+	print "
+	<div id='content'>
+	$content
+	</div>
+	";
 }
 ?>
