@@ -42,7 +42,7 @@ if ($format=='taconite') {
 	print "
 	<div id='content'>
 	$content
-	</div>
+	</div><!--content-->
 	";
 }
 ?>
