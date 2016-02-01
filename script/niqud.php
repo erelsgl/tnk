@@ -11,10 +11,10 @@
 require_once("hebrew.php");
 require_once("../admin/db_connect.php");
 
-global $NOTLETTER, $WORDBOUND, $winnolet;
+global $NOTLETTER, $WORDBOUND, $NOTLETTER_WINDOWS1255;
 $NOTLETTER = "[^א-ת]";
-$WORDBOUND = "[ \t\n<>.;:,'\"!?]";  // Don't include []
-$winnolet =utf8_to_windows1255($NOTLETTER);
+$WORDBOUND = "[ \t\n<>.;:,'\"!?]";  // Don't add []!
+$NOTLETTER_WINDOWS1255 =utf8_to_windows1255($NOTLETTER);
 
 /** 
  * Add niqud to the first $limit psuqim in $contents. (set $limit=-1 to convert all)
@@ -74,7 +74,7 @@ function niqud_psuqim($contents, $limit=1) {
  * Add niqud to a single verse. Used as callback by regexp searcher in niqud_psuqim. 
  */
 function niqud_psuq($matches) {
-	global $winnolet, $WORDBOUND;
+	global $NOTLETTER_WINDOWS1255, $WORDBOUND;
 
 	$contents = $matches[0];
 	$qod_sfr_quoted = quote_all($matches[1]);
@@ -91,7 +91,7 @@ function niqud_psuq($matches) {
 		WHERE book_code = $qod_sfr_quoted
 		AND chapter_code = $qod_prq_quoted
 		AND verse_number BETWEEN $mspr_psuq_1 AND $mspr_psuq_2
-		ORDER BY LENGTH(word_niqud) DESC
+		ORDER BY LENGTH(word_niqud) DESC, word_number ASC
 		"); // replace the longer words first, to prevent incorrect replacing of subwords
 
 	$citut_mnuqd = $citut_mqori;
@@ -101,7 +101,7 @@ function niqud_psuq($matches) {
 	foreach ($words as $word_number => &$word_im_niqud) {
 		$word_im_niqud = utf8_to_windows1255(preg_replace("/\s+/","",$word_im_niqud));
 
-		$word_bli_niqud = preg_replace("/$winnolet/","",$word_im_niqud);
+		$word_bli_niqud = preg_replace("/$NOTLETTER_WINDOWS1255/","",$word_im_niqud);
 		$word_im_niqud = windows1255_to_utf8($word_im_niqud);
 		$word_bli_niqud = windows1255_to_utf8($word_bli_niqud);
 
@@ -150,25 +150,25 @@ if (basename(__FILE__)==basename($_SERVER['PHP_SELF'])) {
 		$contents = "בימיו בנה חיאל בית האלי את <b>יריחה</b> באבירם בכרו יסדה
 ובשגיב צעירו הציב דלתיה כדבר ה' אשר דבר ביד יהושע בן נון";
 	
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16","34",$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n\n";
 	}
 	
 	function test2() {
 		//$GLOBALS['DEBUG_QUERY_TIMES']=true;
 		$contents = "בִּשְׁנַת שְׁלֹשִׁים וְאַחַת שָׁנָה לְאָסָא מֶלֶךְ יְהוּדָה מָלַךְ עָמְרִי עַל יִשְׂרָאֵל שְׁתֵּים עֶשְׂרֵה שָׁנָה, בְּתִרְצָה מָלַךְ שֵׁשׁ שָׁנִים. וַיִּקֶן אֶת הָהָר שֹׁמְרוֹן מֵאֶת שֶׁמֶר בְּכִכְּרַיִם כָּסֶף וַיִּבֶן אֶת הָהָר וַיִּקְרָא אֶת שֵׁם הָעִיר אֲשֶׁר בָּנָה עַל שֶׁם שֶׁמֶר אֲדֹנֵי הָהָר שֹׁמְרוֹן. וַיַּעֲשֶׂה עָמְרִי הָרַע בְּעֵינֵי ה' וַיָּרַע מִכֹּל אֲשֶׁר לְפָנָיו. וַיֵּלֶךְ בְּכָל דֶּרֶךְ יָרָבְעָם בֶּן נְבָט ובחטאתיו אֲשֶׁר הֶחֱטִיא אֶת יִשְׂרָאֵל לְהַכְעִיס אֶת ה' אֱלֹהֵי יִשְׂרָאֵל בְּהַבְלֵיהֶם. וְיֶתֶר דִּבְרֵי עָמְרִי אֲשֶׁר עָשָׂה וּגְבוּרָתוֹ אֲשֶׁר עָשָׂה הֲלֹא הֵם כְּתוּבִים עַל סֵפֶר דִּבְרֵי הַיָּמִים לְמַלְכֵי יִשְׂרָאֵל. וַיִּשְׁכַּב עָמְרִי עִם אֲבֹתָיו וַיִּקָּבֵר בְּשֹׁמְרוֹן וַיִּמְלֹךְ אַחְאָב בְּנוֹ תַּחְתָּיו";
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"09a","16",23,28,$contents));
-		print "<p>$contents</p>";
+		print "<p>$contents</p>\n\n";
 	}
 	
 	function test3() {
@@ -181,12 +181,28 @@ if (basename(__FILE__)==basename($_SERVER['PHP_SELF'])) {
 		$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
 		print "<p>$contents</p>\n";
 		$contents = niqud_psuq ( array ($contents,"28","31",4,5,$contents));
-		print "<p>$contents</p>\n";
+		print "<p>$contents</p>\n\n";
 	}
+    
+    function test4() {
+        // There are two words that look the same without dots.
+        // Will the function select the correct dotting for each word?
+        $before = "זאב וטלה ירעו כאחד ואריה כבקר יאכל תבן ונחש עפר לחמו לא ירעו ולא ישחיתו בכל הר קדשי אמר ה'";
+		$after = niqud_psuq ( array ($before,"10","65",25,25,$before));
+        $expected = "זְאֵב וְטָלֶה יִרְעוּ כְאֶחָד וְאַרְיֵה כַּבָּקָר יֹאכַל תֶּבֶן וְנָחָשׁ עָפָר לַחְמוֹ לֹא יָרֵעוּ וְלֹא יַשְׁחִיתוּ בְּכָל הַר קָדְשִׁי אָמַר ה'";
+        if (strcmp($after,$expected)==0)
+            print "<p>test 4 OK!</p>\n\n";
+        else {
+            print "<p>test 4 FAILED!</p>\n";
+            print "<p>$before</p>\n";
+            print "<p>$after</p>\n\n";
+        }
+    }
 	
 	test1();
 	test2();
 	test3();
+	test4();
 }
 
 ?>

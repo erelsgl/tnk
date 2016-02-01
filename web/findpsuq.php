@@ -14,12 +14,14 @@ $SCRIPT=realpath(dirname(__FILE__)."/../script");
 require_once("$SCRIPT/findpsuq_lib.php");  // main search function
 
 $phrase = !empty($_GET['q'])? $_GET['q']: "";
-$single_verse = !empty($_GET['single_verse']);
 $phrase_quoted = quote_all($phrase);
 $phrase_html = htmlspecialchars($phrase,ENT_QUOTES);
+
+$reverse = !empty($_GET['reverse']);
+$single_verse = !empty($_GET['single_verse']);
 $add_sikum = (!empty($_GET['add_sikum']));
 $add_niqud = (!empty($_GET['add_niqud']));
-$reverse = !empty($_GET['reverse']);
+$no_spaces = !empty($_GET['no_spaces']);
 
 $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 
@@ -36,6 +38,7 @@ print "
 			".($single_verse? "<input type='checkbox' name='single_verse' checked='checked' />רק פסוק אחד ": "")."<br/>
 			<input type='checkbox' name='add_niqud' ".($add_niqud? " checked='checked'": "")." />עם&nbsp;ניקוד 
 			<input type='checkbox' name='add_sikum' ".($add_sikum? " checked='checked'": "")." />עם&nbsp;סיכום 
+			<input type='checkbox' name='no_spaces' ".($no_spaces? " checked='checked'": "")." />בלי רווח
 			<input type='checkbox' name='reverse' />לאחור
 			<input type='submit' value='חפש!' />
 		</form>
@@ -52,7 +55,7 @@ if ($phrase) {
 	if ($reverse)
 		$fixed_phrase = mb_strrev($fixed_phrase);
 	
-	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum);
+	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces);
 
 	print "
 <div id='results'>
