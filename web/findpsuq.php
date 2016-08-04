@@ -11,7 +11,9 @@ error_reporting(E_ALL);
 
 global $TNKUrl;
 $SCRIPT=realpath(dirname(__FILE__)."/../script");
+
 require_once("$SCRIPT/findpsuq_lib.php");  // main search function
+
 
 $phrase = !empty($_GET['q'])? $_GET['q']: "";
 $phrase_quoted = quote_all($phrase);
@@ -25,9 +27,8 @@ $no_spaces = !empty($_GET['no_spaces']);
 
 $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 
-
-
 require("find_header.php");
+
 print "
 <div id='top'>
 	<div class='center'>
@@ -46,15 +47,13 @@ print "
 </div><!--top-->
 ";
 
-
 if ($phrase) {
-	//print "\$phrase=$phrase";
+
 	$fixed_phrase = fix_regexp($phrase);
-	//print "\$phrase=$fixed_phrase";
 	
 	if ($reverse)
 		$fixed_phrase = mb_strrev($fixed_phrase);
-	
+
 	list ($findpsuq_results, $findpsuq_count) = find_phrase($fixed_phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces);
 
 	print "

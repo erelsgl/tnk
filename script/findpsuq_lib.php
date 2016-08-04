@@ -8,6 +8,7 @@
 
 require_once("../admin/db_connect.php");
 require_once("$SCRIPT/niqud.php");  // for adding dots (niqud) to the displayed verses
+require_once("$SCRIPT/coalesce.php");
 
 /**
  * Fix some common mistakes users do when entering regular expressions for searching:
@@ -99,7 +100,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 		$mspr_psuq = $verse['verse_number'];
 		$ot_psuq = $verse['verse_letter'];
 		$verse_text = $verse['verse_text'];
-		$ktovt_trgum = $verse['ktovt_trgum'];
+		$ktovt_trgum = coalesce($verse['ktovt_trgum'],'');
 		$ktovt_sikum = ($add_sikum? $verse['ktovt_sikum']: null);
 
 		$verse_text_bli_niqud_utf8 =
@@ -189,7 +190,9 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  * @param $with_spaces [boolean] - false to remove spaces from the verse (search letters only)
  */ 
 function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces) {
-	global $TNKDb;
+	global $TNKDb;   # Defined in admin/db_connect_params.php. Should be nonempty only if the tnk1 website is active.
+	print "***$TNKDb***";
+
 	//If the phrase contains niqud, look in the column of dotted verse text:
 	$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
 	if ($find_niqud)

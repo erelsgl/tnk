@@ -15,7 +15,7 @@ All tables are represented by 2 files: an SQL file that creates the table and a 
 
 ## Requirements
 * Apache 2+
-* PHP 5.2+
+* PHP 5.2 to 6  (does not work with PHP 7)
 * MySQL 5+
 
 ## Installation
@@ -27,6 +27,8 @@ A. Clone the repository, e.g.:
 B. In your Apache2 configuration, create an alias "/tnk" that points to the "web" folder. e.g.:
 
 	sudo ln -s [full-path-to-repository]/web /var/www/tnk
+	sudo ln -s [full-path-to-repository]/web /var/www/html/tnk
+	sudo ln -s [full-path-to-repository]/web /opt/lampp/htdocs/tnk
 
 C. Run the create script:
 

@@ -17,15 +17,15 @@ print "
 ## Requirements
 
 * MySQL 5+
-* PHP 5+
+* PHP 5 or 6 (but not 7)
 * PHP-MySQL extension
 ";
 
 if (!function_exists("mysql_query"))
-	die("TNK requires MySQL and PHP-MySQL extension, but they are not installed!\n");
+	die("Function mysql_query not found! Either you do not have MySQL or PHP-MySQL extension, or you have PHP 7\n");
 
 $SCRIPT = dirname(__FILE__) . '/../script';
-	
+
 require_once("$SCRIPT/sql.php");
 require_once("$SCRIPT/sql_backup.php");
 require_once("$SCRIPT/coalesce.php");
@@ -52,7 +52,11 @@ function show_create_page() {
 	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
 	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
 	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
-	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKDb'],'tnk1'));
+
+	// check if tnk1 database exists
+	$rows = mysql_query("SHOW DATABASES LIKE 'tnk1'");
+	$tnk1_default_database = (mysql_num_rows($rows)>0? "tnk1": "");
+	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKDb'],$tnk1_default_database));
 	
 	print "
 ## Credentials
