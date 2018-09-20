@@ -103,10 +103,13 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 		$ktovt_trgum = coalesce($verse['ktovt_trgum'],'');
 		$ktovt_sikum = ($add_sikum? $verse['ktovt_sikum']: null);
 
-		$verse_text_bli_niqud_utf8 =
-			preg_replace("/יהוה/", "ה'",
-			preg_replace("/<b>.*<\/b>/","",
-			$verse_text));
+		$verse_text_bli_niqud_utf8 = $verse_text;
+		$verse_text_bli_niqud_utf8 = preg_replace("/יהוה/", "ידוד",$verse_text_bli_niqud_utf8);
+		if (!$no_spaces) {
+			$verse_text_bli_niqud_utf8 = preg_replace("/ידוד/", "ה'",$verse_text_bli_niqud_utf8);
+		}
+		$verse_text_bli_niqud_utf8 = preg_replace("/<b>.*<\/b>/","",$verse_text_bli_niqud_utf8);
+
 		$verse_text_bli_niqud = utf8_to_windows1255($verse_text_bli_niqud_utf8);
 
 		if (preg_match("/$phrase/",$verse_text_bli_niqud)) {
