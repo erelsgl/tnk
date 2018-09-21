@@ -194,7 +194,6 @@ function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, 
  */ 
 function find_phrase($phrase, $single_verse, $add_niqud, $add_sikum, $no_spaces) {
 	global $TNKDb;   # Defined in admin/db_connect_params.php. Should be nonempty only if the tnk1 website is active.
-	print "***$TNKDb***";
 
 	//If the phrase contains niqud, look in the column of dotted verse text:
 	$find_niqud = (preg_match("/[ִֵֶַָֹֻּ]/",$phrase));
