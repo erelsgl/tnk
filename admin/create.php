@@ -52,6 +52,7 @@ function show_create_page() {
 	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
 	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
 	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
+	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKUrl'],'tnk1'));
 
 	// check if tnk1 database exists
 	$rows = mysql_query("SHOW DATABASES LIKE 'tnk1'");
