@@ -84,12 +84,12 @@ function show_create_page() {
 	read("Tanakh Navigation Site URL ", "TNKUrl");
 	read("Tanakh Navigation Site database ", "TNKDb");
 	
-	print "
-## Data for Google search (optional)
+// 	print "
+// ## Data for Google search (optional)
 
-";
-	read("Google API key", "GOOGLE_API_KEY");
-	read("Google CSE ID", "GOOGLE_CSE_ID");
+// ";
+// 	read("Google API key", "GOOGLE_API_KEY");
+// 	read("Google CSE ID", "GOOGLE_CSE_ID");
 	print "Local? [$GLOBALS[is_local]]: "; $is_local = trim(fgets(STDIN));
 	$_POST['is_local'] = $is_local? $is_local: $GLOBALS['is_local'];
 }
@@ -148,6 +148,7 @@ function create_database_and_user() {
 	$db_user_quoted = quote_smart($_POST['db_user'])."@".quote_smart($_POST['db_host']);
 	sql_query_or_die("CREATE USER IF NOT EXISTS $db_user_quoted IDENTIFIED BY ".quote_all($_POST['db_pass']).";");
 	sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[db_name].* TO $db_user_quoted WITH GRANT OPTION");
+	sql_query_or_die("GRANT SESSION_VARIABLES_ADMIN ON *.* TO $db_user_quoted");
 	if ($_POST['TNKDb']) {
 		sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[TNKDb].* TO $db_user_quoted WITH GRANT OPTION");
 	}
