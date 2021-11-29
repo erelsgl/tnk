@@ -146,7 +146,7 @@ function create_database_and_user() {
 	}
 
 	$db_user_quoted = quote_smart($_POST['db_user'])."@".quote_smart($_POST['db_host']);
-	sql_query_or_die("CREATE USER $db_user_quoted IDENTIFIED BY ".quote_all($_POST['db_pass']).";");
+	sql_query_or_die("CREATE USER IF NOT EXISTS $db_user_quoted IDENTIFIED BY ".quote_all($_POST['db_pass']).";");
 	sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[db_name].* TO $db_user_quoted WITH GRANT OPTION");
 	if ($_POST['TNKDb']) {
 		sql_query_or_die("GRANT ALL PRIVILEGES ON $_POST[TNKDb].* TO $db_user_quoted WITH GRANT OPTION");
