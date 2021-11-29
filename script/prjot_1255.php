@@ -33,7 +33,7 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 		SELECT tarikim.*, book_name, chapter_letter, verse_number, ktovt_prq 
 		FROM tarikim
 		INNER JOIN psuqim ON(tarikim.psuq=psuqim.id)
-		WHERE xodj=$month_data[mspr_nisn] AND yom=$day
+		WHERE xodj=".$month_data['mspr_nisn']." AND yom=$day
 		");
 	$jewish_date_events_html='';
 	while ($row=sql_fetch_assoc($jewish_date_events)) {
