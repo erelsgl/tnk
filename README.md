@@ -14,9 +14,9 @@ All tables are represented by 2 files: an SQL file that creates the table and a 
 # 2. Code
 
 ## Requirements
-* Apache 2+
+* Apache 2
 * PHP 5.2 to 6  (does not work with PHP 7)
-* MySQL 5+
+* MySQL 8
 
 ## Installation
 
