@@ -90,7 +90,7 @@ function prjot($from_day=0, $to_day=0) {
 	$max_days=7;
 	if ($to_day<$max_days)
 		$jewish_date_events_html .= "
-			<p class='more'>(<a href='/tnk/prjot_1255.php?format=html&amp;from_day=-$max_days&amp;to_day=$max_days'>עוד תאריכים</a>)</p>";
+			<p class='more'>(<a href='/tnk/prjot_utf8.php?format=html&amp;from_day=-$max_days&amp;to_day=$max_days'>עוד תאריכים</a>)</p>";
 
 	$prjot_html = '';
 	if ($to_day==0) {
