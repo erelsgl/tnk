@@ -8,6 +8,7 @@ CREATE TABLE `psuqim` (
   `text_otiot` text,
   `text_maqafim` text,
   `text_niqud` text,
+  `text_niqud_pisuq` text,
   `text_teamim` text,
   `after_text` varchar(15) DEFAULT NULL,
   `ktovt_prq` varchar(16) DEFAULT NULL,
