@@ -18,5 +18,5 @@ CREATE TABLE `psuqim` (
 
 SET character_set_database=utf8;
 
-LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/psuqim.txt'  INTO TABLE psuqim (id,book_code,book_name,chapter_letter,verse_number,verse_letter,text_otiot,text_maqafim,text_niqud,text_teamim,after_text,ktovt_prq,ktovt_sikum);
+LOAD DATA LOCAL INFILE '$BACKUP_FILEROOT/psuqim.txt'  INTO TABLE psuqim (id,book_code,book_name,chapter_letter,verse_number,verse_letter,text_otiot,text_maqafim,text_niqud,text_niqud_pisuq,text_teamim,after_text,ktovt_prq,ktovt_sikum);
 
