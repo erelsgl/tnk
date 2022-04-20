@@ -114,7 +114,7 @@ function sikum($sfr, $prq, $psuq,
 	if ($include_navigation && $TNKDb) {
 		/* קרא את כל המאמרים מאתר הניווט בתנך */
 		sql_query_or_die("
-			CREATE TEMPORARY TABLE mamrim
+			CREATE TEMPORARY TABLE IF NOT EXISTS mamrim
 			SELECT psuq1, bn, kotrt
 			FROM $TNKDb.qjr_psuq_tnk1
 			WHERE sfr = $qod3_sfr_quoted
@@ -378,7 +378,7 @@ function verse_quotation(
 	$mspr_psuq) {
 
 	$verse_text_niqud = sql_evaluate("
-		SELECT text_niqud
+		SELECT text_niqud_pisuq
 		FROM psuqim
 		WHERE book_code = $qod3_sfr_quoted
 		AND chapter_letter = $ot_prq_quoted
