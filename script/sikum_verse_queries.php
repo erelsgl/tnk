@@ -2,10 +2,6 @@
 
 $GLOBALS['GOOGLE_CSE_LINK']='http://www.google.com/cse?cx=010178520503316434778%3Aufdjhgdvtao';
 
-function etnachta_url($kotrt_sfr, $mspr_prq, $mspr_psuq_0, $mspr_psuq_1) {
-	return "http://www.etnachta.co.il/tanach.php?book=$kotrt_sfr&fromPerek=$mspr_prq&fromPasuk=$mspr_psuq_0&toPerek=$mspr_prq&toPasuk=$mspr_psuq_1";
-}
-
 /**
  * @param mixed $verse_text string or array of strings
  */

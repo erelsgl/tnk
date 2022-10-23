@@ -1,7 +1,7 @@
 <?php
 error_reporting(E_ALL);
 
-require_once('sikum_verse_queries.php'); // verse_search_results, kotrt_link
+require_once('sikum_verse_queries.php'); // verse_search_results
 require_once('string.php'); // string_between_regexps
 
 require_once('MediawikiClient.php');  // must be here for rewrite_library.php
@@ -239,7 +239,7 @@ function sikum($sfr, $prq, $psuq,
 				}
 
 				$title_for_output = $title;
-				$title_for_output = str_replace("קטע:","",$title_for_output);
+				$title_for_output = str_replace("$QTA:","",$title_for_output);
 				if (preg_match("/^ביאור:בבלי /",$title_for_output)) {
 					$title_for_output = str_replace("ביאור:","",$title_for_output);
 					$title_for_output = str_replace("#עמוד","",$title_for_output);
@@ -257,27 +257,6 @@ function sikum($sfr, $prq, $psuq,
 		//	</div><!--mamrim-->
 	}
 
-	if ($include_etnachta) {
-		$url = etnachta_url($kotrt_sfr, $mspr_prq, $mspr_psuq_0, $mspr_psuq_1);
-		$contents = file_get_contents($url);
-
-		$messages = string_between_regexps("!<div id=.message_\\d+.>!", "!<div id=.blank.></div>!", $contents, /*$include_regexp1=*/true, /*$include_regexp2=*/true, /*$offset=*/0);
-
-		if ($messages) {
-			$messages = preg_replace("/display:none/","",$messages);
-			$messages = preg_replace("!<a[^<>]+btn2[^<>]+>.*?</a>!","",$messages);
-
-			$messages = preg_replace("!<div class=.calendar.><p>(.*?)<br>(.*?)<br>(.*?)</p></div>!","$2 $1 $3",$messages);
-
-			//<div id='etnachta'>
-			$sikum_perushim_nosafim .= "
-				<p>מאמרים מאתר אתנכתא:</p>
-				$messages
-				<p>[[(<a href='$url'>אתנכתא</a>)]]</p>
-				";
-			$sikum_wikisource .= "\n==מאמרים מאתר אתנכתא==\n$messages\n\n";
-		}
-	}
 
 	$sikum .= "
 	<div class='advanced'>
