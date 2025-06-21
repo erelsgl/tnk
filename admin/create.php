@@ -48,8 +48,6 @@ function show_create_page() {
 	set_coalesce($GLOBALS['db_name'], coalesce($GLOBALS['db_name'],'tnk'));
 	set_coalesce($GLOBALS['db_user'], coalesce($GLOBALS['db_user'],'tnk'));
 	set_coalesce($GLOBALS['db_pass'], coalesce($GLOBALS['db_pass'],'tnk'));
-	set_coalesce($GLOBALS['GOOGLE_API_KEY'], coalesce($GLOBALS['GOOGLE_API_KEY'],''));
-	set_coalesce($GLOBALS['GOOGLE_CSE_ID'], coalesce($GLOBALS['GOOGLE_CSE_ID'],''));
 	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
 	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
 	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKUrl'],'tnk1'));
@@ -83,14 +81,7 @@ function show_create_page() {
 ";
 	read("Tanakh Navigation Site URL ", "TNKUrl");
 	read("Tanakh Navigation Site database ", "TNKDb");
-	
-// 	print "
-// ## Data for Google search (optional)
-
-// ";
-// 	read("Google API key", "GOOGLE_API_KEY");
-// 	read("Google CSE ID", "GOOGLE_CSE_ID");
-	print "Local? [$GLOBALS[is_local]]: "; $is_local = trim(fgets(STDIN));
+	print "Do you create the site locally on your home computer? [$GLOBALS[is_local]]: "; $is_local = trim(fgets(STDIN));
 	$_POST['is_local'] = $is_local? $is_local: $GLOBALS['is_local'];
 }
 
@@ -176,8 +167,6 @@ function create_db_connect_params() {
 \$GLOBALS['TNKDb'] = \$TNKDb = '$_POST[TNKDb]';
 \$GLOBALS['BACKUP_FILEROOT'] = '$BACKUP_FILEROOT';
 \$GLOBALS['BACKUP_WHATSNEW_FILEROOT'] = '$BACKUP_WHATSNEW_FILEROOT';
-\$GLOBALS['GOOGLE_API_KEY'] = \$GOOGLE_API_KEY = '$_POST[GOOGLE_API_KEY]';
-\$GLOBALS['GOOGLE_CSE_ID' ] = \$GOOGLE_CSE_ID = '$_POST[GOOGLE_CSE_ID]';
 \$GLOBALS['is_local' ] = \$is_local = '$_POST[is_local]';
 ?".">")  /* put dirname inside the ""! */
 or die ("Can't create db_connect_params");
