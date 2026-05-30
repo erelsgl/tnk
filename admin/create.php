@@ -49,7 +49,7 @@ function show_create_page() {
 	set_coalesce($GLOBALS['db_user'], coalesce($GLOBALS['db_user'],'tnk'));
 	set_coalesce($GLOBALS['db_pass'], coalesce($GLOBALS['db_pass'],'tnk'));
 	set_coalesce($GLOBALS['is_local'], coalesce($GLOBALS['is_local'],'false'));
-	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'http://tora.us.fm'));
+	set_coalesce($GLOBALS['TNKUrl'], coalesce($GLOBALS['TNKUrl'],'https://tora.quest'));
 	set_coalesce($GLOBALS['TNKDb'], coalesce($GLOBALS['TNKUrl'],'tnk1'));
 
 	// check if tnk1 database exists

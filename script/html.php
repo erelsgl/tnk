@@ -3,7 +3,7 @@
 /**
  * @file html.php
  * Utilities for writing HTML tags.
- * @author Rent a Brain http://tora.us.fm/rentabrain
+ * @author Erel Segal-Halevi https://erelsgl.github.io
  * @date 2006-11
  */
 
@@ -53,7 +53,7 @@ function xhtml_header($title, $body_attributes='', $stylesheets=NULL, $custom_co
 $result .= "
 </head>
 <!--
-	PHP Programming by Erel Segal - Rent a Brain http://tora.us.fm/rentabrain
+	PHP Programming by Erel Segal-Halevi https://erelsgl.github.io
 -->
 <body lang='$HTML_LANGUAGE' dir='$HTML_DIRECTION' $body_attributes>
 ";
@@ -67,7 +67,7 @@ return $result;
 function xhtml_footer() {
 return "</body>
 <!--
-	PHP Programming by Erel Segal - Rent a Brain http://tora.us.fm/rentabrain
+	PHP Programming by Erel Segal-Halevi https://erelsgl.github.io
 -->
 </html>
 ";

@@ -196,7 +196,7 @@ function google_results($phrase) {
 	else if (!$GOOGLE_CSE_ID) return array("", 0);
 	$GoogleClient = new GoogleClient(/*$max_result_count=*/8); // use multiples of 8
 	$results = $GoogleClient->search_results(
-		"$phrase site:tora.us.fm", $GOOGLE_API_KEY, "iw", $GOOGLE_CSE_ID);
+		"$phrase site:tora.quest", $GOOGLE_API_KEY, "iw", $GOOGLE_CSE_ID);
 	if (!$results) return array(
 			"לא ניתן לחפש בגוגל - הקצאת החיפושים היומית הסתיימה - חכו למחר",
 			1);

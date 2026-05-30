@@ -1,7 +1,7 @@
 <?php
 /** 
  * @file prjot.php - weekly torah portion calculations
- * @author Erel Segal http://tora.us.fm
+ * @author Erel Segal-Halevi https://erelsgl.github.io
  * @date 2012-08-06
  * @license GPL
  */

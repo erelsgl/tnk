@@ -1,7 +1,7 @@
 <?php
 /** קידוד חלונות
  * @file prjot_1255.php - weekly torah portion calculations קידוד חלונות
- * @author Erel Segal http://tora.us.fm
+ * @author Erel Segal-Halevi https://erelsgl.github.io
  * @date 2009-08-09
  */
 

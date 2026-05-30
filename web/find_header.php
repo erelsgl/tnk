@@ -9,5 +9,5 @@
 <link rel='stylesheet' type='text/css' href='_themes/klli.css' />
 
 </head>
-<!-- PHP Programming by Erel Segal - http://tora.us.fm/erelsgl -->
+<!-- PHP Programming by Erel Segal-Halevi https://erelsgl.github.io -->
 <body lang='he' dir='rtl' class='find'>

@@ -1,7 +1,7 @@
 <?php
 /** קידוד חלונות
  * @file prjot_1255.php - weekly torah portion calculations קידוד חלונות
- * @author Erel Segal http://tora.us.fm
+ * @author Erel Segal-Halevi https://erelsgl.github.io
  * @date 2009-08-09
  */
 
@@ -55,7 +55,7 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
   $year_for_yovel = $year-5775;
   $year_for_jmita = $year_for_yovel % 7;
   $new_year_name = "שנה $year_for_jmita לשמיטה ו-$year_for_yovel ליובל הראשון בעידן הירושה השלישית";
-	$new_year_link = "http://tora.us.fm/tnk1/msr/yovl.html"; 
+	$new_year_link = "/tnk1/msr/yovl.html"; 
 	return "<h1>$title $jewish_date_name; <a href='$new_year_link'>$new_year_name</a>.</h1>
 		$jewish_date_events_html";
 }
