@@ -7,7 +7,7 @@ require_once("../admin/db_connect.php");
 
 
 function mxbr_results($phrase_utf8_quoted) {
-	global $TNKUrl, $TNKDb;
+	global $TNKDb;
 	if (!$TNKDb)
 		return array('',0);
 	sql_query_or_die("SET @sdr=0");
@@ -29,7 +29,7 @@ function mxbr_results($phrase_utf8_quoted) {
 			$results = "<tr>
 			<td class='sdr'>$row[sdr]</td>
 			<td class='tarik_hosfa'>$row[tarik_hosfa]</td>
-			<td class='kotrt'><a href='$TNKUrl/$row[ktovt]'>$row[kotrt]</a></td>
+			<td class='kotrt'><a href='/$row[ktovt]'>$row[kotrt]</a></td>
 			</tr>" . $results;
 		}
 		return array($results,$count);
@@ -39,9 +39,8 @@ function mxbr_results($phrase_utf8_quoted) {
 }
 
 function mxbr_results_online($phrase_utf8_quoted, $link_for_updated_list, $target_encoding) {
-	global $TNKUrl;
 	$timeout_seconds = 1;
-	$url = "$TNKUrl/tnk1/mxbr_results.php?q=".urlencode($phrase_utf8_quoted);
+	$url = "/tnk1/mxbr_results.php?q=".urlencode($phrase_utf8_quoted);
 	$content = @file_get_contents($url,null, stream_context_create(array('http'=>array('timeout' => $timeout_seconds))));
 	if ($content) {
 		$content = iconv("Windows-1255", $target_encoding, $content);

@@ -117,7 +117,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 			$verse_text_bli_niqud_utf8 = windows1255_to_utf8($verse_text_bli_niqud);
 			++$match_count;
 
-			$anchor = "<a class='psuq' href='$TNKUrl/tnk1/$ktovt#$mspr_psuq'>$kotrt$mspr_psuq</a>";
+			$anchor = "<a class='psuq' href='/tnk1/$ktovt#$mspr_psuq'>$kotrt$mspr_psuq</a>";
 
 			$result .= cite_link_item($anchor, $verse_text_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 
@@ -136,7 +136,7 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
 					$jtei_jurot_bli_niqud_utf8 = windows1255_to_utf8($jtei_jurot_bli_niqud);
                                         
 					#using "#mspr_psuq and _blank" causes a strange error on some instances of MSIE (see above)
-					$anchor = "<a class='psuq' href='$TNKUrl/tnk1/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
+					$anchor = "<a class='psuq' href='/tnk1/$ktovt_qodm#$mspr_psuq_qodm'>$kotrt_qodmt$mspr_psuq_qodm-" . ($kotrt === $kotrt_qodmt? '': $kotrt) . "$mspr_psuq</a>";
 
 					$result .= cite_link_item($anchor, $jtei_jurot_bli_niqud_utf8, $ktovt_trgum, $ktovt_sikum, $add_niqud);
 

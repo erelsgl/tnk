@@ -13,7 +13,6 @@ require_once(dirname(__FILE__)."/prjot.php");
 $DEBUG_QUERY_TIMES = isset($_GET['debug_times']);
 
 function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE) {
-	global $TNKUrl;
 	list ($year, $month, $day) = explode("-",$jewish_date_1);
 	$month_data = sql_evaluate_assoc("
 		SELECT mspr_nisn, CONCAT(
@@ -42,7 +41,7 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 		else
 			$event_html = "";
 		$event_html .= $row['kotrt'];
-		$event_url = "$TNKUrl/tnk1/$row[ktovt_prq]#$row[verse_number]";
+		$event_url = "/tnk1/$row[ktovt_prq]#$row[verse_number]";
 		$event_html .= " (<a href='$event_url'>$row[book_name] $row[chapter_letter]$row[verse_number]</a>)";
 		$jewish_date_events_html .= "<li>$event_html</li>
 		";
@@ -61,7 +60,6 @@ function jewish_date_events($jewish_date_1, $title='', $notify_if_not_found=TRUE
 }
 
 function prjot($from_day=0, $to_day=0) {
-	global $TNKUrl;
 	$after_sunset_gmt = minutes_after_sunset_gmt() > 0; // 1 between sunset in Israel and midnight GMT, i.e. between sunset and 3:00 AM IDT
 	$gmt_timestamp = time();
 
@@ -112,7 +110,7 @@ function prjot($from_day=0, $to_day=0) {
 				$prjot_html = "
 					<h1>פרשות השבוע</h1>
 					<ul>$prjot_html</ul>
-					<p class='more'>(<a href='$TNKUrl/tnk1/klli/limud/prjot4.html'>עוד על החלוקה לפרשות</a>)</p>
+					<p class='more'>(<a href='/tnk1/klli/limud/prjot4.html'>עוד על החלוקה לפרשות</a>)</p>
 				";
 			}
 		}

@@ -58,7 +58,7 @@ function get_mftx_line($row) {
 	global $TNKUrl;
 	list ($qod, $kotrt, $sug, $ktovt) = $row;
 	$class = hebrew2latin($sug);
-	$ktovt = htmlspecialchars("$TNKUrl/$ktovt");
+	$ktovt = htmlspecialchars("/$ktovt");
 	$sug = @str_replace("_"," ",$sug);
 	$kotrt = str_replace(":", ";", $kotrt);
 
