@@ -6,7 +6,6 @@
  */
 
 $SCRIPT=realpath(dirname(__FILE__)."/../script");
-global $TNKUrl;
 
 require_once("$SCRIPT/html.php");
 require_once("$SCRIPT/taconite.php");
@@ -28,14 +27,14 @@ if ($format=='taconite') {
 	</replaceContent>
 	".jquery_taconite_footer();
 } else if ($format=='html') {
-	print xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
+	print xhtml_header("פרשת השבוע", "", array("/tnk1/_themes/klli.css"))."
 	$content
 	".xhtml_footer();
 } else {
-	print xhtml_header("פרשת השבוע", "", array("$TNKUrl/tnk1/_themes/klli.css"))."
+	print xhtml_header("פרשת השבוע", "", array("/tnk1/_themes/klli.css"))."
 	<!--NiwutElyon0-->
 	<div class='NiwutElyon'>
-	<div class='NiwutElyon'><a href='$TNKUrl/tnk1/'>אתר הניווט בתנ&quot;ך</a>&gt;</div>
+	<div class='NiwutElyon'><a href='/tnk1/'>אתר הניווט בתנ&quot;ך</a>&gt;</div>
 	</div>
 	<!--NiwutElyon1-->
 	$content

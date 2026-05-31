@@ -55,7 +55,6 @@ function get_ascending_rows($phrase_quoted, $limit=5) {
  * @param $row a quadruple ($qod, $kotrt, $sug, $ktovt) from QLT_mfxt table
  */
 function get_mftx_line($row) {
-	global $TNKUrl;
 	list ($qod, $kotrt, $sug, $ktovt) = $row;
 	$class = hebrew2latin($sug);
 	$ktovt = htmlspecialchars("/$ktovt");

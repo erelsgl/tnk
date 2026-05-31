@@ -87,7 +87,7 @@ function emphasize_phrase_if_needed($verse_text_bli_niqud, $phrase, $emphasize_p
  * @param $add_niqud boolean true to add dots (niqud) to the emphasized verses.
  */ 
 function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_niqud=0,$add_sikum=0,$no_spaces=0) {
-	global $TNKUrl, $newline;
+	global $newline;
 	$result = '';
 	$result_wikisource = '';
 	$kotrt_qodmt=""; $ktovt_qodm=""; $mspr_psuq_qodm=""; $verse_text_bli_niqud_qodmt="";
@@ -157,10 +157,10 @@ function search_results($verses,$phrase,$emphasize_phrase,$single_verse=0,$add_n
  * @return string
  */
 function cite_link_item($verse_anchor, $verse_text, $ktovt_trgum, $ktovt_sikum, $add_niqud) {
-	global $TNKUrl, $newline;
+	global $newline;
 
 	$mamr_anchor = ($ktovt_trgum?
-		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "$TNKUrl/")."$ktovt_trgum'>פירוט</a>":
+		"<a href='".(preg_match("/:/",$ktovt_trgum)? "": "/")."$ktovt_trgum'>פירוט</a>":
 		"");
 
 	$sikum_anchor = ($ktovt_sikum?

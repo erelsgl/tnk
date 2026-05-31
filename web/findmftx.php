@@ -23,11 +23,10 @@ $title = $phrase? "*$phrase - ניווט בתנך": "ניווט בתנך*";
 
 
 require("find_header.php");
-global $TNKUrl;
 print "
 <div id='top'>
 	<div class='center'>
-		<h1><a href='$TNKUrl/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
+		<h1><a href='/tnk1'><img src='_themes/logo3.png' alt='תוצאות הניווט בתנך' title='תוצאות הניווט בתנך' /></a></h1>
 		<form method='get' action=''>
 			היעד:
 			<input id='find' name='q' value='$phrase_html' />

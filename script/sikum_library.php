@@ -41,7 +41,7 @@ function sikum_explanation() {
 function sikum($sfr, $prq, $psuq,
 	$include_miqraotgdolot, $include_navigation, 
 	$include_wikisource, $include_google, $include_etnachta) {
-	global $TNKUrl, $TNKDb, $is_local;
+	global $TNKDb, $is_local;
 	
 	if (!$sfr || !$prq || !$psuq) {
 		user_error("Missing sfr/prq/psuq", E_USER_WARNING);
